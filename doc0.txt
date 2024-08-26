@@ -1,0 +1,2468 @@
+ 
+Version	Date	Author	Description
+1	22/01/2023		Tạo tài liệu
+2	11/05/2024	Nthtrang3	Bổ sung highlight đỏ tại màn danh sách Asset, danh sách Report
+2	21/05/2024	Nthtrang3	Bổ sung highlight cam tại logic sinh Code Asset  tại màn Tạo mưới Physical Asset
+
+
+
+Store 
+
+STT	UC	Name
+1	UC01	Xem danh sách store
+2	UC02	Tạo mới store
+3	UC03	Chỉnh sửa thông tin store
+4	UC04	Xoá thông tin Store
+5		Migrate dữ liệu
+
+
+Store dùng để chỉ các kho hàng tại các Location cụ thể trong hệ thống GAMs, Store được áp dụng khi gán tài sản với kho cụ thể
+1. Xem danh sách Store 
+1.1 Tác nhân, điều kiện, kết quả mong muốn
+Xem danh sách Store 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting 
+-	Kết quả mong muốn: Hiển thị thông tin danh sách Location (có chứa các thông tin store), có hỗ trợ search+ filter 
+                                                  Không có giá trị -> hiển thị N/A
+1.2 UI Design
+
+
+
+1.3 User Interface Requirements
+No	Tên	Kiểu hiển thị 	Kiểu dữ liệu	Required	Độ dài max	Mặc định 	Description
+Search +filter 	Search +filter 	Search +filter 	Search +filter 	Search +filter 	Search +filter 	Search +filter 	Search +filter 
+1	Nation 	Dropdown 	--
+	--
+	--
+	Blank 	Placeholder: Nation
+Dữ liệu dropdown lấy theo dữ liệu bảng bên GAMS
+Dropdown có dạng
+Check box để chọn 1 / Nhiều/ Tất cả - Default: k chọn 
+Ok = lưu filter
+Reset = quay lại trạng thái default 
+2	City 	Dropdown 	--
+	--
+	--
+	Blank 	Dữ liệu dropdown lấy theo dữ liệu bảng bên GAMS
+Placeholder: City
+Dữ liệu dropdown lấy theo dữ liệu bảng bên GAMS
+Dropdown có dạng
+
+Check box để chọn 1 / Nhiều/ Tất cả - Default: k chọn 
+Ok = lưu filter
+Reset = quay lại trạng thái default 
+3	Building 	Dropdown 	--
+	--
+	--
+	Blank 	Dữ liệu dropdown lấy theo dữ liệu bảng bên GAMS
+Placeholder: Building
+Dropdown có dạng
+
+Check box để chọn 1 / Nhiều/ Tất cả - Default: k chọn 
+Ok = lưu filter
+Reset = quay lại trạng thái default 
+4	Store 	Search bar	--
+	No 	250	Blank	alphanumeric
+Dùng để search store
+Nếu >250 ký tự => không lưu &không hiển thị thêm. 
+Placeholder: store
+5	Location Status 	Dropdown 	--
+	--
+	--	--	Filter status theo location
+Các giá trị bao gồm: Active/ Inactive/ Delete 
+Place holder: Status
+Check box để chọn 1 / Nhiều/ Tất cả 
+6	Store Status 	Dropdown 	--
+	--
+	--	Active	Filter status theo store
+Các giá trị bao gồm: Active/ Inactive
+Place holder: Store status 
+Check box để chọn 1 / Nhiều/ Tất cả - Default: Active 
+7	Search 	Button	--
+	--
+	--	Blank 	Thực hiện lệnh apply filter/ keyword để search 
+Place holder: Search for store
+8	Reset 	Button	--
+	--
+	--	--	Reset = load lại trang
+Khi ấn reset -> tự động load lại trang, các giá trị đưa về trạng thái mặc định khi chưa apply filter & search
+9	Sync location	Button	--
+	--
+	--
+--	--	Đồng bộ location với OMS ngay tại thời điểm ấn
+Có hiển thị Popup, mô tả ở phần 1.5
+Bảng danh sách Location/ store 	Bảng danh sách Location/ store 	Bảng danh sách Location/ store 	Bảng danh sách Location/ store 	Bảng danh sách Location/ store 	Bảng danh sách Location/ store 	Bảng danh sách Location/ store 	Bảng danh sách Location/ store 
+	No	Text	Number 	--
+	--	--	Number only
+Số thứ tự
+Danh sách Location được sắp xếp theo thứ tự Alphabet sort theo Nation -> City -> Building -> Floor
+	Icon 	icon button 	--
+	--	--	Dạng mở rộng 	Chỉ hiển thị với những Location có store
+Default: Dạng mở rộng 
+Để xem vị trí và danh sách store ứng với từng Location, người dùng ấn 
+Người dùng ấn để ẩn  danh sách store vừa xem. 
+	Nation	Text	Text
+	--	------	--	View only 
+Lấy từ OMS
+Tên Nation
+Hiển thị tối đa 1 dòng, text dài hơn khoảng cách 1 line -> thay các ký tự còn lại bằng”...” 
+	City	Text	Text
+	--
+	--
+--	--	View only 
+Lấy từ OMS
+Tên city
+Hiển thị tối đa 1 dòng, text dài hơn khoảng cách 1 line -> thay các ký tự còn lại bằng”...” 
+	Building	Text	Text
+	--
+	--	--	View only 
+Lấy từ OMS
+Tên buidling
+Hiển thị tối đa 1 dòng, text dài hơn khoảng cách 1 line -> thay các ký tự còn lại bằng”...” 
+	Floor	Text	Text
+	--
+	--	--	View only
+Lấy từ OMS
+Hiển thị tối đa 1 dòng, text dài hơn khoảng cách 1 line -> thay các ký tự còn lại bằng”...” 
+	Status 	Text	Text
+	--
+	--	--	Bao gồm Active/ Inactive/Delete
+Active = Enable (bên OMS)
+Inactive = Disable (bên OMS) 
+Delete(đối với những location đã bị xoá trên OMS nhưng vẫn đang được gán vs store trên GAMs) refer to 1.4 
+	Action 	icon button	--
+	--
+	--	--	Dùng để thêm store tương ứng với từng location
+Refer to @[Tạo mới store] 
+Bảng giá trị Store 	Bảng giá trị Store 	Bảng giá trị Store 	Bảng giá trị Store 	Bảng giá trị Store 	Bảng giá trị Store 	Bảng giá trị Store 	Bảng giá trị Store 
+1.1	No	text	Number
+	--
+	--
+	--	View only- Number
+Start = 1
+Danh sách store được sắp xếp theo thứ tự thời gian, tạo mới sẽ ở vị trí đầu tiên 
+1.2	Store	Text	Text
+	--
+	--	--	View only
+Tên store tương ứng
+Hiển thị tối đa trong khoảng cách 1 line, nếu dài hơn thì các ký tự sau sẽ được thay bằng “...”
+1.3	PIC	Text	Text
+	--
+	--	--	Person in Charge 
+Được người tạo chọn từ danh sách Ldap khi tạo Store
+View only
+1.4	Status 	Text	Text
+	--
+	--	--	Bao gồm Active/ Inactive 
+1.5 	Action 	icon button 	--
+	--
+	--	--	Bao gồm các option
+
+Make default: Tạo giá trị default cho danh sách store Refer to @[Chỉnh sửa thông tin Store]
+Edit: Chỉnh sửa thông tin store tương ứng Refer to@[Chỉnh sửa thông tin Store]
+Remove from list: Xoá store khỏi list Refer to @[Xoá thông tin store]
+Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 
+1.1	Số liệu phân trang  	Text	Number
+	--
+	--	--	Format: Số lượng phân trang trên tổng giá trị. Ví dụ
+
+Tức là màn hình đang được phân 100 dòng dữ liệu/ 1 creen của tổng số 11774 dòng dữ liệu 
+1.2	Số trang hiện có	button	--
+	--
+	--	--	Số trang phụ thuộc vào số lượng data display trên 1 trang
+Format
+
+Hiển thị 5 trang đầu +... và số thứ tự của trang cuối cùng dưới dạng button
+Ấn vào trang tương ứng để xem dữ liệu của trang
+để xem trang trước đó (-1) của trang đang được hiển thị; Disable khi ở trang đầu
+để xem trang liền kề sau (+1) của trang đang được hiển thị; Disable khi ở trang cuối
+1.3	Số lượng dòng hiển thị 1 trang 	dropdown list 	--
+	--
+	--	--	Dropdown có dạng và bao gồm các giá trị sau
+
+Chọn 20/page -> = Hiển thị 20 dòng dữ liệu/ 1 page
+
+1.4 Business Rules
+Có thể xem nhiều store thuộc các location khác nhau trên một màn hình
+Các thông tin của Location (Nation, City, Building, Floor, Status) sẽ được đồng bộ từ OMS:
+Chỉ lấy các Location có thông tin đến Floor
+Tự động Sync dữ liệu từ OMS vào 0h hàng ngày & Đồng bộ thủ công
+Nếu text được hiển thị có dấu “…” vì quá dài, khi hover vào sẽ hiển thị full text 
+Những Location bị xoá trên OMS nhưng vẫn đang được gán với store sẽ xuất hiện cảnh báo  với status là Delete; Nếu Location đang k gán với Store nào nhưng bị xoá trên OMS -> không hiển thị lên GAMs -> Hover hiển thị tooltip “This location does not exist”
+Tương tự nếu Location bị disable trên OMS nhưng vẫn đang được với store cũng sẽ xuất hiện cảnh báo với status là Inactive -> Hover hiển thị tooltip “This location is inactive now”
+Khi Store Default nằm trong Location có status là Inactive và Delete thì sẽ không chọn sẵn Store Default đó ở các chỗ setting Store => Hiển thị Placeholder “Select Store”
+Chỉ các Store active và nằm trong Location active thì mới được tính là đang hoạt động để hiển thị trong danh sách Store có thể lựa chọn trên hệ thống
+Chỉ Inactive/Remove Store khi store đang không có asset nào
+1.5 Work Flow 
+
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Truy cập màn danh sách asset 	User	Người dùng chọn Tab Setting 
+
+2	Search và filter tìm kiếm kết quả 	User	Người dùng có thể sử dụng tính năng search và filter để tìm store mình muốn xem.
+Với các filter dưới dạng dropdown bao gồm Nation/ City/ Building -> người dùng có thể ấn chọn mỗi filter để hiển thị dropdown có các options khác nhau -> Người dùng có thể chọn 1 giá trị/ nhiều giá trị/ tất cả giá trị bằng cách click vào các ô check box tương ứng. 
+Với search cho Store, người dùng có thể type keyword để search Partial text search, based on điều kiện LIKE
+Chỉ search trong danh sách các store
+Khi người dùng ấn nút search -> kết hơp tất cả các điều kiện, bao gồm filter + search để hiển thị kết quả 
+Màn không có kqua (bỏ hết dữ  liệu) chỉ hiển thị title. 
+Nếu có kết quả, hiển thị tất cả store khớp kết quả (không hiển thị mỗi location) 
+Vẫn áp dụng phân trang khi trả kết quả.
+
+			Khi ấn Sync Location -> hiển thị popup có nội dung: 
+“ Are you sure that you want to sync location from OMS now?” + Confirm & Cancel button
+-> ấn confirm: -> đồng bộ dữ liệu với OMS tại thời điểm hiện tại, load lại trang và cập nhật dữ liệu mới 
+     ấn Cancel -> đóng popup, không tiến hành đồng bộ
+
+1.6 Message list
+No	When	Message code	Type 	Content
+1	Khi Người dùng ấn Sync Location nhưng trả kết quả fail	GAMS_Sync_01	Toast message	Sync Location failed. Please try again
+
+
+2. Tạo mới store 
+2.1 Tác nhân, điều kiện, kết quả mong muốn
+Tạo mới Store 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting, trong phần danh sách Location ấn chọn icon “+” Add store
+-	Kết quả mong muốn: Hiển thị popup chứa các thông tin cần điền, có validate thông tin khi thêm mới như mô tả bên dưới 
+2.2 UI Design
+
+
+
+2.3 User Interface Requirements
+No	Tên	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+1	Store name 	Text field	Text	Yes	250	Blank	Tạo tên trong store
+Unique (check trùng) trong list tất cả store 
+> 250 ký tư -> k lưu và hiển thị thêm
+Placeholder: Input store name
+2	PIC	Dropdown+ search 	--
+	Yes	--
+	--
+	Dropdown + list (có hỗ trợ search)
+Có dạng: 
+Default dsach hiển thị lần đầu có 20 data, sắp xếp theo alphabet
+Danh sách giữ nguyên như logic cũ lấy từ group CPC của POA
+Cho phép nhập keyword để search Ldap cần điền -> hệ thống sẽ thực hiện lệnh search (partial search trong DB Ldap) hiển thị kết quả (max 20 kết quả sắp xếp theo alphabet) -> chỉ chọn 1 kết quả
+3	Cancel 	Button	--
+	--
+	--
+	--
+	Dừng action
+Có hiển thị popup, mô tả thêm ở phần 2.6
+4	Save	Button	--
+	--
+	--
+	--
+	Tạo mới store với thông tin vừa điền
+Save thành công -> tắt popup + toast message GAMS_Addnew_03 + Thêm store lên đầu danh sách các store của Location tương ứng + Store vừa được tạo mới sẽ có Default status là Active+ Quay về trang Location với danh sách chứa store vừa được tạo mở. 
+
+2.4 Business Rules
+Chỉ tạo mới được 1 store/ 1 lần
+Tên store không được trùng, Check trùng all store trên toàn hệ thống + không phân biệt in hoa in thường. 
+2.5 Work Flow 
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Truy cập màn danh sách asset 	User	Người dùng chọn Tab Setting 
+
+2	Chọn add thêm asset  	User	Người dùng ấn chọn button “+” trên location để tạo store tương ứng, button “+” chỉ enable khi store là active
+3	Hiển thị popup điền thông tin	Hệ thống	Hiển thị popup chứa các thông tin như được mô tả bên trên
+4	Input thông tin 	User	 Người dùng tiến hành điền thông tin được yêu cầu 
+5	Cancel & Save 	User	Ấn cancel: Dừng action
+Có hiển thị popup, mô tả thêm ở phần 2.6
+Ấn Save: Tạo mới store với thông tin vừa điền
+Save thành công -> tắt popup + toast message GAMS_Addnew_03 + Thêm store lên đầu danh sách các store của Location tương ứng + Store vừa được tạo mới sẽ có Default status là Active+ Quay về trang Location với danh sách chứa store vừa được tạo mở.
+
+
+2.6 Message List
+No	When	Message code	Type 	Content
+1	Bỏ trống trường Store 	GAMS_Addnew_01	Inline message, in red color 	Please fill in required field
+2	Tên store bị trùng	GAMS_Addnew_02	Inline message, in red color	The store name already exists. Please choose a different name
+3	Bỏ trống trường PIC	GAMS_Addnew_01	Inline message, in red color 	Please fill in required field
+4	Khi ấn Cancel -> trong trường hợp đã có thông tin được điền sẽ hiển thị popup	GAMS_Addnew_04	Popup + Yes/ Close button 	“Are you sure you want to cancel?” 
+Ấn Yes -> tắt popup , k lưu gì
+Ấn Cancel -> tắt popup, quay lại popup vừa điền thông tin (với các thông tin vừa điền vẫn được hiển thị) 
+5	Tạo mới store thành công, ấn Save	GAMS_Addnew_03	Toast message 	Create store successfully 
+
+
+3. Chỉnh sửa thông tin store 
+3.1 Tác nhân, điều kiện, kết quả mong muốn
+Chỉnh sửa thông tin store 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting, trong phần danh sách Location ấn chọn icon “3 chấm” chọn edit 
+-	Kết quả mong muốn: Hiển thị popup chứa các thông tin đã lưu trước đó để người dùng tiến hành chỉnh sửa và lưu lại hệ thống  
+3.2 UI Design
+
+
+
+3.3 User Interface Requirements
+No	Field name	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 	Popup chỉnh sửa thông tin 
+1	Store name 	Text field	Text	Yes	250	--
+	Tạo tên trong store
+Unique (check trùng) trong danh sách store
+
+2	PIC	Dropdown+ search 	--
+	Yes	--
+	--
+	Dropdown + list (có hỗ trợ search)
+Có dạng: 
+Default dsach hiển thị lần đầu có 20 data, sắp xếp theo alphabet
+Danh sách giữ nguyên như logic cũ lấy từ group CPC của POA
+Cho phép nhập keyword để search Ldap cần điền -> hệ thống sẽ thực hiện lệnh search (partial search trong DB Ldap) hiển thị kết quả (max 20 kết quả sắp xếp theo alphabet) -> chỉ chọn 1 kết quả
+3	Status 	Dropdown	--
+	Yes	--
+	--
+	Dropdown list
+Bao gồm các giá trị: Active/ Inactive 
+4	Cancel 	Button	--
+	--
+	--
+	--
+	Dừng action
+Có hiển thị popup, chi tiết ở phần 3.6
+5	Save	Button	--
+	--
+	--
+	--
+	Update thông tin vừa chỉnh sửa
+-> tắt popup + Lưu thông tin mới trên cả DB và giao diện + toast message GAMS_Editstore_02 + Đưa store lên đầu danh sách các store của Location tương ứng + quay về danh sách Location với danh store chứa store vừa được chỉnh sửa được mở sẵn để view 
+
+3.4 Business Rules
+Chỉ chỉnh sửa được 1 store/ 1 lần
+Tên store không được trùng
+Chỉ inactive khi store đang k có asset đính kèm 
+Sau khi chỉnh sửa thông tin -> dữ nguyên hiện trạng màn list (Ví dụ trước đó có search hay filter gì thì sẽ được dữ nguyên và hiển thị kết quả tương ứng đã được cập nhật )
+3.5 Work Flow 
+
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Sửa store thành default 	User	Từ màn hình Store list, người dùng ấn icon hiển thị các giá trị bao gồm: Make default/ Edit/ Remove from list
+Option Make default chỉ available khi store đó chưa được set default
+Người dùng chọn “Make default” -> Gắn store là default cho các phần sử dụng list store (thường dưới dạng dropdown) trên hệ thống, hiện tại bao gồm các cases sau:
+ khi tạo mới chỉnh sửa Asset
+ Site transfer trong Asset list
+Make default thành công -> hiển thị toast message: GAMS_editstore_01
+Có lỗi xảy ra -> hiển thị toast message: GAMS_editstore_001
+2	Mở quyền edit 	User	Người dùng đăng nhập hệ thống, Chọn tab Setting, trong phần danh sách Location ấn chọn icon “3 chấm” chọn edit 
+3	Sửa thông tin 	User 	User tiến hành sửa thông tin như đã mô tả bên trên
+4	Cancel or Save 	User 	Cancel: Dừng action
+Có hiển thị popup, chi tiết ở phần 3.6
+Save: Update thông tin vừa chỉnh sửa
+-> tắt popup + Lưu thông tin mới trên cả DB và giao diện + toast message GAMS_Editstore_02 + Đưa store lên đầu danh sách các store của Location tương ứng + quay về danh sách Location với danh store chứa store vừa được chỉnh sửa được mở sẵn để view
+
+
+3.6 Message List
+No	When	Message code	Type 	Content
+1	Đánh dấu “make default” thành công	GAMS_editstore_01	Toast message 	Successfully marked the store as default
+2	Đánh dấu make default thất bại	GAMS_editstore_001	Toast message 	Something went wrong. Please try again
+3	Bỏ trống trường store	GAMS_Addnew_01	Inline message, in red color 	Please fill in required field
+4	Tên store bị trùng	GAMS_Addnew_02	Inline message, in red color	The store name already exists. Please choose a different name
+5	sửa store thành“ inactive” khi store đó đang có tài sản 
+	GAMS_editstore_03	Toast message 	“Cannot set store to 'inactive' as it has existing assets” 
+6	Update thông tin store thành công 	GAMS_editstore_02	Toast message 	Updated store’s information successfully
+7	Update thông tin store xảy ra lỗi 	GAMS_editstore_002	Toast message 	Something went wrong. Please try again
+
+
+
+4. Xoá thông tin store 
+4.1 Tác nhân, điều kiện, kết quả mong muốn
+Xoá thông tin store 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting, trong phần danh sách Location ấn chọn icon “3 chấm” chọn remove from list 
+-	Kết quả mong muốn: hệ thống sẽ thực hiện check xem có hợp lệ để xoá không trước khi thực hiện xoá thông tin store   
+4.2 UI Design
+
+4.3 User Interface Requirements
+N/A
+4.4 Business Rules
+Chỉ xoá được store khi store đó đang không có tài sản 
+4.5 Work Flow & Cases
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action  	User	Từ màn hình Store list, người dùng ấn icon hiển thị các giá trị bao gồm: Make default/ Edit/ Remove from list
+Người dùng ấn chọn option: Remove from list 
+2	Check tính hợp lệ và hiển thị thông báo	Hệ thống	Hệ thống check thông tin store, Nếu store vẫn còn chứa tài sản -> Hiển thị message: GAMS_Deletestore_01
+Nếu hợp hệ -> hiển thị popup confirm GAMS_Deletestore_02 
+3	Xoá store (nếu hợp lệ) 	Hệ thống	Sau khi check các thông tin là hợp lệ -> Hệ thống sẽ tiến hàng xoá store khỏi giao diện và gắn tag (deleted) dưới DB đồng thời hiển thị message: GAMS_Deletestore_03
+
+4.6 Message List
+No	Context	Message code	Type 	Content
+1	Khi ấn chọn “ Remove from list”-> store vẫn còn chứa tài sản	GAMS_Deletestore_01	toast message 	Cannot delete store. Assets still exist within the store.
+2	Khi ấn chọn “ Remove from list” -> hợp lệ 	GAMS_Deletestore_02	Popup+ Yes & No button	“ Are you sure that you want to delete this store ?”
+Click Yes = Xoá store trên giao diện và gắn tag trên DB (xoá mềm) + tắt popup+ Thông báo thành công 
+          No = Dừng action + tắt popup + không xoá store
+3	Xoá store thành công 	GAMS_Deletestore_03	toast message 	Store deleted successfully
+4	Xoá store có lỗi xảy ra 	GAMS_Deletestore_04	toast message 	Something went wrong. Please try again. 
+
+
+5. Migrate dữ liệu
+Store cũ đang được lưu với các column: site_id,seq_num,site_name,address,assignee,is_default,city,tenant_id
+Trong khi đó dữ liệu đồng bộ từ OMS: 
+
+nationId
+nation
+cityId
+city
+buildingId
+building
+floorId
+floor
+status
+
+
+=> Không có Key map để có thể tích hợp
+=> Solution: Nhờ HNO lên bảng đối chiếu sau đó tạo thủ công những dữ liệu Store trên hệ thống mới 
+
+Company 
+STT	UC	Name
+1	UC01	Xem danh sách company
+2	UC02	Tạo mới company
+3	UC03	Chỉnh sửa thông tin company
+4	UC04	Xoá thông tin Company
+5		Bộ dữ liệu mới 
+
+
+Company dùng để chỉ các kho hàng tại các Location cụ thể trong hệ thống GAMs, Company được áp dụng khi gán tài sản với công ty cụ thể
+1. Xem danh sách Company 
+1.1 Tác nhân, điều kiện, kết quả mong muốn
+Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting sau đó chọn Subtab Company 
+-	Kết quả mong muốn: Hiển thị thông tin danh sách Company, có hỗ trợ search+ filter 
+                                                  Không có giá trị -> hiển thị N/A
+1.2 UI Design
+
+
+
+1.3 User Interface Requirements
+No	Field name	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+Search +filter	Search +filter	Search +filter	Search +filter	Search +filter	Search +filter	Search +filter	Search +filter
+1	Company 	Search bar	Text	No	250	Blank 
+	Dùng để search theo tên chung công ty
+Placeholder: search by name
+alphanumeric
+>250 ký tự: k tiến hành lưu or áp dụng
+Trả kết quả xem thêm ở phần 1.5
+	Company name 	Search bar	Text	No	250	Blank	Dùng để search theo tên chi tiết công ty
+Placeholder: search by name
+Maxlength: 250 characters
+alphanumeric
+>250 ký tự: k tiến hành lưu or áp dụng
+Trả kết quả xem thêm ở phần 1.5
+	Status 	Dropdown 	--
+	--
+	--
+	Active	
+Các giá trị bao gồm: Active/ Inactive
+Check box để chọn 1 / Nhiều/ Tất cả - Default: k chọn 
+Ok = lưu filter
+Reset = quay lại trạng thái default 
+Trả kết quả xem thêm ở phần 1.5
+	Search 	Button	--
+	--
+	--
+	--
+	Thực hiện lệnh apply filter/ keyword để search 
+Trả kết quả xem thêm ở phần 1.5
+	Reset	Button	--
+	--
+	--
+	--
+	Thực hiện reset các search bar và filter để quay lại vị trí ban đầu
+Reset = load danh sách lại vị trí ban đầu
+	Add	Button 	--
+	--
+	--
+	--
+	Dùng khi add thêm company mới
+Refer to 2. Tạo mới Company
+Bảng danh sách	Bảng danh sách	Bảng danh sách	Bảng danh sách	Bảng danh sách	Bảng danh sách	Bảng danh sách	Bảng danh sách
+1	No	Text	Number	--
+	--
+	--
+	Number only
+Số thứ tự
+Sắp xếp theo thứ tự thời gian Latest -> Oldest 
+2	Company 	Text 	Text	--
+	--
+	--
+	Tên công ty
+Hiển thị tối đa trong phạm vi và khoảng cách 1 line
+> 1 line, thay các ký tự còn lại = “...” 
+3	Company name	Text 	Text 	--
+	--
+	--
+	Tên chi tiết công ty
+Hiển thị tối đa trong phạm vi và khoảng cách 1 line
+> 1 line, thay các ký tự còn lại = “...”
+4	Status 	Text	Active/ Inactive	--
+	--
+	--
+	Bao gồm Active/ Inactive
+5	Action 	Icon
+button	--
+	--
+	--
+	--
+	Mở ra các options bao gồm
+Edit
+Remove from list 
+Edit = Chỉnh sửa thông tin Company, Refer to @[Chỉnh sửa thông tin ]
+Remove from list = Xoá thông tin company, Refer to @[Xoá thông tin company]    
+6	Thanh cuộn 	icon 	--
+	--
+	--
+	--
+	hỗ trợ kéo lên/ xuống để nhìn danh sách 
+Giao diện hiển thị số dòng tuỳ thuộc vào kích thước màn hình + thanh scroll 
+
+
+1.4 Business Rules
+Nếu text được hiển thị có dấu “…” vì quá dài, khi hover vào sẽ hiển thị full text 
+1.5 Work Flow & Cases 
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	User truy cập màn danh sách Company 	User 	Người dùng chọn Tab Setting sau đó chọn Subtab Company 
+
+2	Search & Filter 	User 	Với search cho Company và company name 
+Partial text search, based on điều kiện LIKE
+Khi người dùng ấn nút search -> kết hợp tất cả các điều kiện, bao gồm filter + search để hiển thị kết quả 
+Màn không có kqua (bỏ hết dữ liệu) chỉ hiển thị title. 
+Nếu có kết quả, hiển thị tất cả kết quả hợp lệ, sắp xếp theo thứ tự thời gian
+Vẫn áp dụng phân trang khi trả kết quả.
+
+
+
+2. Tạo mới Company 
+2.1 Tác nhân, điều kiện, kết quả mong muốn
+Tạo mới Store 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting, trong phần danh sách Location ấn chọn icon “+” Add store
+-	Kết quả mong muốn: Hiển thị popup chứa các thông tin cần điền, có validate thông tin khi thêm mới như mô tả bên dưới 
+2.2 UI Design
+
+
+
+2.3 User Interface Requirements
+No	Field name	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+1	Add+	Button 	--
+	--
+	--
+	--
+
+	Tạo yêu cầu thêm mới
+Line tạo mới	Line tạo mới	Line tạo mới	Line tạo mới	Line tạo mới	Line tạo mới	Line tạo mới	Line tạo mới
+	Company 	Text field	Text	Yes	250	Blank 
+	Tạo tên của company
+Unique (check trùng) 
+Placeholder: name
+> 250 ký tự -> k tiến hành lưu
+	Company name 	Text field	Text	Yes	250	Blank 
+	Tạo tên chi tiết cho Company
+Unique (check trùng) 
+Placeholder: Note 
+> 250 ký tự -> k tiến hành lưu
+	Status 	Dropdown	--
+	Yes	--
+	Active	Default: Active
+Lựa chọn giữa 2 giá trị: Active/ Inactive 
+	Cancel 	Button	--
+	--
+	--
+	--
+	Dừng action
+	Save	Button	--
+	--
+	--
+	--
+	Tạo mới Company với thông tin vừa điền
+
+2.4 Business Rules
+Chỉ tạo mới được 1 company/ 1 lần
+Tên Company không được trùng
+2.5 Work Flow & Cases
+
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action 	User 	Người dùng chọn button “Add+” 
+Hệ thống hiển thị 1 line dưới danh sách chứa các thông tin cần điền 
+
+2	Điền thông tin 	User	Người dùng tiến hành điền thông tin được yêu cầu 
+Note: Tên company không được lặp lại, so sánh với list dsach company trong DB (ngoại trừ company đã bị xoá)
+Nếu phát hiện trùng -> hiển thị message : GAMS_Addcom_02
+3	Check data và lưu	Hệ thống 	Note: Tên company không được lặp lại, so sánh với list dsach company trong DB (ngoại trừ company đã bị xoá)
+Nếu phát hiện trùng -> hiển thị message : GAMS_Addcom_02
+Hệ thống sẽ tiến hành lưu mới thông tin Company nếu mọi thông tin input là hợp lệ + thông báo GAMS_Addcom_03 
+
+
+2.6 Message List
+No	When?	Message code	Type 	Content
+1	Khi bỏ trống trường Company name or Company	GAMS_Addcom_01	Inline message, in red color 	Please fill in required field
+2	Khi tên Company bị trùng (Tương tự với company name) 	GAMS_Addcom_02	Inline message, in red color	The company name already exists. Please choose a different name
+3	Khi ấn Cancel -> trong trường hợp đã có thông tin được điền sẽ hiển thị popup	GAMS_Addnew_04	Popup + Yes/ Close button 	“Are you sure you want to cancel?” 
+Ấn Yes -> tắt popup , k lưu gì
+Ấn Cancel -> tắt popup, quay lại Màn hình vừa điền thông tin (với các thông tin vừa điền vẫn được hiển thị) 
+4	Khi tạo mới company thành công 	GAMS_Addcom_03	Toast message 	Create new company successfully 
+
+
+3. Chỉnh sửa thông tin 
+- Actor: Người dùng đăng nhập hệ thống 
+- Tương tự với Edit -> Ấn icon 3 chấm -> Chọn option “Edit”
+-> Ngay tại vị trí Line muốn Edit -> Chuyển dữ liệu từ trạng thái View only sang Editable 
+- Các logic thực hiện như Tạo mới 
+Dùng mẫu như sau:   	+ Khi inactive company nhưng vẫn đang được gắn với Asset -> sẽ báo lỗi dưới dạng Toast message: “Company is still associated with assets” 
++ Cancel và Save button
+-> Nếu thành công -> Hiển thị toast message: “ Update information successfully” 
+
+4. Xoá thông tin company
+4.1 Tác nhân, điều kiện, kết quả mong muốn
+Xoá thông tin Company tương ứng đã chọn 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Setting, và subtab Company, trong phần danh sách Company ấn chọn icon “3 chấm” chọn remove from list 
+-	Kết quả mong muốn: hệ thống sẽ thực hiện check xem có hợp lệ để xoá không trước khi thực hiện xoá thông tin company
+4.2 UI Design
+
+4.3 User Interface Requirements
+N/A
+
+4.4 Work Flow & Cases
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action  	User	Từ màn hình Company list, người dùng ấn icon hiển thị các giá trị bao gồm: Edit/ Remove from list
+Người dùng ấn chọn option: Remove from list 
+2	Check tính hợp lệ và hiển thị thông báo	Hệ thống	Hệ thống check thông tin Company, Nếu Company vẫn còn gắn với asset  -> Hiển thị message: GAMS_Deletecomo_001
+Nếu hợp hệ -> hiển thị popup confirm GAMS_Deletecomo_002
+3	Xoá store (nếu hợp lệ) 	Hệ thống	Sau khi check các thông tin là hợp lệ -> Hệ thống sẽ tiến hàng xoá store khỏi giao diện và gắn tag (deleted) dưới DB đồng thời hiển thị message: GAMS_Deletecomo_01
+
+
+
+4.5 Message List
+No	When 	Message code	Type 	Content
+1	Xóa company nhưng hệ thống check vẫn có tài sản gắn với nó	GAMS_Deletecomo_001	toast message 	Cannot delete this Company. Assets still exist within the store.
+2	Popup confirm việc xóa Company	GAMS_Deletecomo_002	popup + Yes/ cancel button	  “ Are you sure that you want to delete this company ?”
+Người dùng ấn cancel -> dừng action + tắt popup + không xoá store
+Người dùng ấn yes -> xoá companytrên giao diện và DB (xoá cứng) + tắt popup+ hiển thị message thành công
+3	Khi xóa company thành công 	GAMS_Deletecomo_01	toast message 	Company deleted successfully
+
+
+Physical Asset 
+STT	UC	Name
+1	UC01	Tạo mới Physical Asset
+2	UC02	Tạo mới company
+3	UC03	Chỉnh sửa thông tin company
+4	UC04	Xoá thông tin Company
+5		Bộ dữ liệu mới 
+
+
+1. Tạo mới Physical Asset
+1.1 Tác nhân, điều kiện, kết quả mong muốn
+Tạo mới một/nhiều Physical Asset
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Asset, Sau đó nhấn chọn Button “+Add Asset”  
+-	Kết quả mong muốn: hệ thống hiển thị màn hình chứa các thông tin tương ứng cần điền với đầy đủ các rule hiển thị và validation như mô tả bên dưới 
+1.2 UI Design
+
+
+
+
+
+1.3 User Interface Requirements
+No	Field name	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+1	Add Asset 	Button 	--	--	--	--	Start action “Add asset”
+	Type	Dropdown 	--	--	--	--	Lựa chọn loại tài sản
+Các loại tài sản bao gồm:
+o   Physical Asset
+o   Information Asset
+o   Software Asset
+o   Service Asset
++ Nếu user không có quyền Dulead hoặc không được delegate thì Type không bao gồm [Information Asset]
++ Nếu user chỉ có quyền Employee và được delegate hoặc chỉ có quyền DU lead thì Type chỉ gồm [Information Asset]
+Invoice detail	Invoice detail	Invoice detail	Invoice detail	Invoice detail	Invoice detail	Invoice detail	Invoice detail
+	Invoice Form 	Text field	Text	Yes	25	Blank 	Form của invoice
+alphanumeric
+Placeholder: Input invoice Form
+	Invoice Serial 	Text field	Text 	Yes	8	Blank 	Serial của invoice
+alphanumeric
+Unique
+Placeholder: input serial
+	Invoice No	Text field	Text	Yes	10	Blank 	No của invoice
+alphanumeric
+Unique
+Placeholder: Input invoice No
+	Invoice Date	Date picker	Date	Yes	--	Blank 	Ngày tạo invoice
+Có dạng date picker 
+Click vào box -> mở date picker 
+Chỉ chọn 1 ngày ( available mọi khoảng thời gian)
+Placeholder: Select date
+format: yyyy/mm/dd
+	Purchase Date	Date picker	Date 	No	--	Blank 	Ngày chi trả cho Asset
+Có dạng date picker 
+Click vào box -> mở date picker 
+Chỉ chọn 1 ngày ( available mọi khoảng thời gian)
+Placeholder: Select date
+Formay: yyyy/mm/dd
+	File invoice (Upload)	Button	--	No	--	--	Button dùng để upload file 
+Format supported: png, jpeg, jpg, pdf
+Max : 3MB 
+	File invoice (list uploaded) 	List	--	--	--	--	Danh sách file được upload
+Hiển thị max trong khoảng cách 1 dòng được quy định
+> 1 line, thay các ký tự còn lại = “...”, hover hiển thị full text
+Format:   trong đó (image_12345 = Name) 
+Sắp xếp theo thứ tự thời gian
+“x” = tự động delete sau khi ấn
+Hover hiển thị tooltip full name file
+	Link e_voice	Text field	--	No	--	--	Link của e_voice
+Format: xxx. xxx (link’s format)
+ icon để thêm mới, click để add link đang nhập 
+	Link e_voice (danh sách) 	list 	--	--	--	--	Danh sách các Link e_voice
+Sắp xếp theo thứ tự thời gian
+Hiển thị max trong khoảng cách 1 dòng được quy định
+> 1 line, thay các ký tự còn lại = “...”,hover hiển thị full text 
+“x” = tự động xoá sau khi ấn
+Hover hiển thị tooltip full link
+	Total VAT amount 	Text field	--	Yes	--	--	Tổng số tiền VAT
+= Tổng số tiền VAT Amount Detail
+Phân chia các đơn vị bằng dấu “.”
+number only
+maxlength: 150 ký tự
+Placeholder:  Input VAT amount
+	Total amount 	Textfiel 	Text	yes	150	Blank 	Tổng số tiền 
+number only
+maxlength: 150 ký tự 
+Placeholder: Input Amount
+	Currency 	dropdown	--	--	--	VND	Đơn vị tiền tệ
+default: VND
+Gồm các giá trị fix cứng: 
+VND
+USD
+JPY
+EUR
+SGD
+AUD
+KRW
+MYR
+VAT table	VAT table	VAT table	VAT table	VAT table	VAT table	VAT table	VAT table
+	VAT rate 	text field	number	yes	50	Blank	% giá trị VAT
+number only
+placeholder: Input VAT Rate (%) 
+	VAT amount 	text field	number	yes	150	Blank	Giá trị VAT ứng với từng rate
+Number only
+maxlength: 150 ký tự
+placeholder: Input VAT amount
+	Add filed 	button	--	--	--	--	Thêm một line để nhập VAT rate + VAT amount
+	Delete icon	button	--	--	--	--	Xoá line tương ứng
+General information             	General information             	General information             	General information             	General information             	General information             	General information             	General information             
+	Company	Dropdown + search selection 	--	Yes	--	Blank	Chọn company cho asset
+Placeholder: Select a company
+Danh sách dropdown là danh sách Company được tạo và lưu ở phần Company trên hệ thống, = giá trị trường Company
+	Company name	text	Text	Yes	--	Blank	Auto hiển thị theo việc chọn company
+= Giá trị trường Company Name (trong phần danh sách Company trên hệ thống) 
+	Supplier	Search selection + dropdown	--	Yes	--	Blank	Lựa chọn nhà cung cấp
+Placeholder: Select a supplier
+Danh sách dropdown là danh sách Supplier được tạo và lưu ở phần Supplier trên hệ thống, = giá trị trường Supplier
+	Tax Code	Text	--	Yes	--	Blank	Auto hiển thi theo việc chọn Supplier
+Lấy từ trường Tax Code trong danh sách Supplier trên module Setting
+	Store	Dropdown + search	--	Yes	--	Blank	Chọn store cho Asset 
+User có thể tìm kiếm và chọn tên Store từ danh sách Location- Store tại module Setting 
+Chỉ được chọn một
+	Building 	Dropdown + search	--	Yes	--	Blank	Chọn Building cho dropdown
+User có thể tìm kiếm và chọn tên Building từ danh sách Location- Store tại module Setting 
+Chỉ được chọn một
+	Syn SAP	Check box	--	No	--	Uncheck	Gửi thông tin asset qua SAP 
+Check = Đồng bộ tất cả asset trong invoice sang SAP
+Uncheck = Không đồng bộ tất cả asset trong invoice sang SAP
+Thể hiện việc đồng bộ sang SAP bằng cách hiển thị dot ở sau Code ngoài màn list asset:
+Màu xanh: Đã sang SAP
+Màu cam: Chưa sang SAP
+Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách	Asset Infor : Default hiển thị bảng ban đầu chỉ có title và Add product button
+- Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Khi ấn thêm mới asset vào list -> hiển thị 1 dòng tại cuối bảng -> Thêm thành công -> đưa asset lên đầu danh sách
+	Add asset	Button 	--	--	--	--	Thêm 1 asset vào list 
+Disable khi đang thêm mới product
+	No. 	text 	--	--	--	--	STT, sắp xếp theo thứ tự thời gian
+Start = 1
+	Asset name 	Text field 	--	Yes	500	Blank	Tên tài sản
+Placeholder: Asset name
+Maxlength: 500 ký tự
+> 500 ký tự -> k hiển thị thêm
+Asset name sau khi lưu sẽ hiển thị dưới dạng text field -> click vào để xem thông tin của từng tài sản 
+Trong  phạm vi 1 line khi hiển thị trên cột, các ký tự còn lại thay = “…”, hover sẽ hiển thị full text
+Nếu đang nhập thì max hiển thị trong 3 line, có thanh cuộn ngang để kéo xem full text
+Hover hiển thị tooltip full name
+	Popup tương ứng khi ấn Asset name 	Popup 	--	--	--	--	Hiển thị popup khi chọn
+Tên Asset = tên Asset hiển thị trên cột (vừa được điền), Hiển thị max trong 2 line, các ký tự còn lại thay bằng “…”
+Hover hiển thị tooltip full name
+No và Code tự sinh, với Code -> tự động hiển thị theo quy tắc refer to 1.5 Work Flow 
+Cột Serial và Associate & Mac hiện dưới dạng text field, không bắt buộc điền, maxlength =150 
+điền > maxlength -> k cho điền thêm
+- Cột Associated Asset
+Chỉ cho phép input khi tại Setting Asset group có checked “Can be associated”
+Gõ ký tự = search trong list Tài Sản (theo Code), có validation, chỉ lấy status: New asset, available, InUse 
+Diền sai -> báo lỗi Invalid Data.
+             - Cột MAC- Ethenet
+Chỉ cho phép input khi tại Setting Asset group có checked “MAC-Ethenet”
+Cancel button -> huỷ hành động, nếu đang có thông tin đã điền sẽ hiển thị thêm 1 popup có nội dung
+“Are you sure you want to cancel this action” + yes/no question:
+Ấn yes để đóng 2 popup và quay về màn thêm mới
+Ấn no để đóng popup hiện tại
+Save button -> Lưu thông tin vừa nhập 
+	Hired Asset 	Check box	--	--	--	unselected	Đánh dấu tài sản được thuê hay không
+Default = unselected 
+	Guest 	Check box	--	--	--	unselected	Default = unselected 
+Tích chọn Guest => Enable Guest name
+	Guest name 	Text field	Text	--	250	Disable	Điền thông tin guest name
+Default -> disable
+Alphanumeric
+Chỉ enable khi tích chọn Guest
+điền > Maxlength -> không chèn thêm ký tự nào
+Hiển trị trong khoảng cách 1 dòng, các ký tự sau (nếu có) thay bằng “...”
+Hover hiển thị tooltip full name
+	Asset group 	Dropdown_ search selection	--	Yes	--	--	Chọn asset group 
+User có thể tìm kiếm và chọn tên Asset group từ danh sách Asset group tại module Setting
+ = trường Asset group name 
+Placeholder: asset group
+	Unit 	Text field	Text	Yes	50	Cái	Điền tên đơn vị tính
+Maxlength: 50 ký tự
+> Maxlength: k lưu các ký tự sau
+Alphanumeric
+Default: Cái
+	Quantity	Text field	Number	Yes	50 	1	Điền số lượng
+number only
+> Maxlength: k lưu các ký tự sau
+Alphanumeric
+	Price 	Text field	Text	Yes	150	Price	Điền giá thành
+number only
+> Maxlength: k lưu các ký tự sau
+Alphanumeric
+	VAT Rate (%)	Text field	Number	Yes	50	Blank	Điền rate của VAT
+number only
+Maxlength: 50 ký tự
+> Maxlength: k lưu các ký tự sau
+Placeholder: VAT Rate (%)
+	Manufacturer	Dropdown_ search selection	--	Yes	--	--	Lựa chọn nhà sản xuất
+User có thể tìm kiếm và chọn tên Manufacturer từ danh sách tại module Setting
+Chỉ được chọn 1 Manufacturer
+Default: k chọn gì
+Placeholder: Manufacturer
+	Warranty (Month)	Text field	number	No	50	12	Thời hạn bảo hành
+Number only
+> Maxlength: k lưu các ký tự sau
+	Expiration Date	Date picker	Date	No 	--	--	Thời gian hạn sử dụng
+Placeholder: Expiration Date
+Default:
+Blank: Khi chưa nhập “Invoice date”
+Invoice date + 12 month: Khi đã nhập “Invoice date”
+Chỉ available những ngày sau ngày “Invoice date”
+Có thể chỉnh sửa 
+Khi thay đổi Warrantly thì tự động cập nhật Exporation Date
+	Note	Text field	Text	No	250	blank	Note cho tài sản
+> maxlength -> không điền các ký tự sau 
+Placeholder: Note
+	Action 	Icon button 	--	--	--	--	Các action được thực hiện 
+Các options:
+Edit: = chỉnh sửa thông tin, Mở trường thông tin thành dạng có thể chỉnh sửa được để tiến hành sửa Logic edit được viết ở _1.5_Work_Flow 
+Remove from list: Xoá asset khỏi list (Hiển thị popup, mô tả thêm ở phần dưới 1.6 Message List)
+Disable cả 2 action này nếu đang thêm mới 
+	Cancel
+(Add Asset)	Button	--	--	--	--	Cancel hành động thêm mới asset vào list 
+Hiển thị popup, mô tả thêm ở phần dưới 1.6 Message List 
+Chỉ hiển thị khi đang có dòng thêm mới asset
+	Save
+(Add Asset) 	Button	--	--	--	--	Lưu hành động thêm mới asset vào list 
+Add asset vào đầu bảng 
+Chỉ hiển thị khi đang có dòng thêm mới asset
+	Cancel
+(Invoice+Asset)	Button	--	--	--	--	Cancel hành động thêm mới cả Invoice + Asset
+Hiển thị popup, mô tả thêm ở phần dưới 1.6 Message List
+	Save
+(Invoice+Asset)	Button	--	--	--	--	Lưu hành động thêm mới Invoice + Asset
+Hiển thị popup checked 1.6 Message List
+	Popup khi ấn Save (Invoice+Asset)	--	--	--	--	--	Thoroughly inspected the assets: checked (bắt buộc) default: unchecked
+Image(không bắt buộc): Upload (button): tải ảnh, kích thước max 3 MB , tối đa 10 ảnh, sắp xếp theo thứ tự thời gian 
+upload > 10 ảnh k thể up
+upload sai format -> 1.6 Message List
+Note (k bắt buộc): maxlength: 250 ký tự (> maxlength k thể điền thêm)
+Cancel = tắt popup quay lại màn thêm mới với đầy đủ thông tin
+Save: Lưu hành động thêm mới 
+=> Add tất cả trong list asset vừa tạo vào bảng bên ngoài (ở các vị trí đầu) , lưu dưới DB nếu thành công 
+
+1.4 Business Rules
+Có thể thêm mới nhiều sản phẩm trong cùng 1 lần nếu cùng invoice, company, store, supplier 
+Các asset được thêm mới sẽ được gắn vào đầu bảng danh sách bên ngoài (sắp xếp theo thứ tự thời gian, mới nhất lên trên) 
+Không có quyền truy cập tính năng khi thực hiện thao tác start action -> hiển thị message: “ Access denied. You do not have permission to access this feature”
+2 trường “Hired Asset” và “Guest Asset” không được check cùng 1 lúc. Check “Hired Asset” thì disable “Guest Asset” và ngược lại
+1.5 Work Flow 
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action  	User	Từ màn hình Danh sách Asset (tab asset) , chọn Button “Add asset”
+->Hệ thống hiển thị màn tạo mới asset chứa các thông tin cần điền 
+2	Điền thông tin	User	Người dùng điền các thông tin được yêu cầu, tuân theo các BR dưới đây: 
+1. Trong phần general trường Store và Building phải được cập nhật theo nhau
+Vd: người dùng chọn 1 store trước thì Building sẽ hiển thị theo Store đó, có được chỉnh sửa 
+&  Người dùng chọn 1 giá trị building trước -> danh sách store sẽ được hiển thị theo building đó  
+2. Được add nhiều asset trong 1 bảng table asset, không giới hạn số lượng và luôn sắp xếp theo thứ tự thời gian, add gần nhất sẽ ở đầu danh sách
+3. Quy tắc sinh mã tài sản (asset code):
+a.	Tài sản vật lý: {Năm mua}{Nhóm tài sản}{Số thứ tự mua}, trong đó: 
+-	Loại tài sản gồm 4 ký tự theo quy định tại Setting module;
+-	Số thứ tự mua bắt đầu từ 001 trở đi k giới hạn số lượng chữ số, hết năm thì đánh lại từ 001;
+-	Ví dụ: 2017LAP-039, 2017BANG001, 2017-PC-029,…
+Lưu ý: trong trường hợp người dùng đang tạo mã tài sản nhưng ngay tại thời điểm đó có người khác cùng tạo lấy trước mã code nó thì hệ thống sẽ phải tự nhận biết và sinh ra mã code tương ứng liền sau.
+b.         Trong trường hợp mã Code trên hệ thống bị trùng (trường hợp 2 người cùng đồng thời tạo mới Asset) -> Thực hiện lưu thông tin cho người ấn save trước và đổi lại mã code cho người ấn save sau kèm theo popup thông báo: 
+
+Trong đó: Danh sách hiển thị = Danh sách Asset name của những Asset bị thay đổi code
+                Hiển thị tối đa 4 giá trị, nhiều hơn 4 giá trị sẽ xuất hiện thanh scroll dọc để xem các giá trị còn lại 
+                Ấn OK button để đóng popup và đi tới màn Asset list
+3. Quy tắc sinh mã tài sản (Code Asset):
+Template: Company + Năm + Type + (-) Abrreviation Asset Group + STT 
+Trong đó:
+- Company bao gồm:
+= GLB (Khi Tenant = Null/1)
+= CJP (Khi Tenant = 2)
+= CKR (Khi Tenant = 3)
+= APAC (Khi Tenant = 4)
+- Type gồm:
+= Null (case 1,2)
+= Hired (case 3,4)
+= Guest (case 5)
+- STT tăng dần từ “001”
+VD:
+4. Khi user thêm tài sản mới thành công, hệ thống tự động cập nhật các thông tin sau: 
+	Tài sản vật lý: 
+-	Status của tài sản là Available; 
+-	Owner là PIC của kho;
+-	From (trong phần Assigment) là ngày tạo tài sản;
+5. Trong phần add product( bảng asset infor) 
+Khi edit 1 line asset trong bảng:
++ Nếu edit trường Asset Group * và Quantity * -> Sẽ hiển thị popup confirm “ Are you sure you want to edit {Asset group/ Quantity}? All the data before would be deleted.” + cancel/ confirm button
+ Click cancel: đóng popup
+Confirm = Update data mới, xoá toàn bộ dữ liệu liên quan đến 
+3	Confirm& cancel	User	Với các trường hợp Confirm và Cancel, hệ thống sẽ hiển message như được mô tả phần 1.6 dưới đây
+
+
+1.6 Message List
+No	Context	Code	Type 	Content
+1	Type vượt quá maxlength của invoice form 	GAMS_Physical asset_01	Inline message, red color	Makes Form required having at most 25 characters 
+2	Type vượt quá maxlength của invoice serial 	GAMS_Physical asset_02	Inline message, red color	Makes Serial required having at most 8 characters 
+3	Type vượt quá maxlength của invoice no	GAMS_Physical asset_03	Inline message, red color	Makes No required having at most 10 characters 
+4	Khi bỏ trắng các trường required	GAMS_Physical asset_04	Inline message, red color	{Tên trường} is required 
+5	File upload sai format của file invoice 	GAMS_Physical asset_05	toast message	File format is not correct, only png, jpeg, jpg, pdf format is supported 
+5.1	File upload sai format trong popup sau khi ấn save	GAMS_Physical asset_051	toast message	File format is not correct, only png, jpeg, jpg, pdf format is supported 
+5.2	File upload > max size (3MB)	GAMS_Physical asset_052
+	toast message
+	File upload failed. The maximum file size allowed is 3MB. 
+6	Khi invoice Serial or invoice No bị trùng 
+với invoice serial: check trong list các invoice serial đc lưu trong hệ thống
+Tương tự với Invoice No	GAMS_Physical asset_06	Inline message, red color	Invoice already exists 
+7	Link evoice không hợp lệ 	GAMS_Physical asset_07	Inline message, red color	Link url invalid
+8	Nếu total VAT amount không bằng tổng VAT amout detail 	GAMS_Physical asset_08	Inline message, red color	Unmatched VAT Amount. Please check VAT Amount, VAT Amount detail
+9	Ấn cancel trong khi đang thêm mới asset vào list
+Hoặc
+Remove from list asset trong danh sách	GAMS_Physical asset_09	Popup 	
+10	Khi tổng giá trị invoice không bằng >, < tổng giá trị product + vat 	GAMS_Physical asset_10	popup cảnh bảo 	Click save = vẫn lưu asset và invoice
+Cancel = tắt popup
+
+11	Nếu 2 người đồng thời tiến hành tạo asset -> Hệ thống sinh mã Code giống nhau 	GAMS_Physical asset_11	Toast message 	Asset creation failed. The generated asset code is already in use at the same time. Please try again. + Ok button 
+-> Ấn ok -> 
+12	Ấn nút cancel cả màn hình thông tin 
+	GAMS_Physical asset_12	Popup 	 “Are you sure you want to cancel this action” + yes/no question:
+Ấn yes để đóng popup và quay về màn danh sách
+Ấn no để đóng popup hiện tại, vẫn ở màn thêm mới với các thông tin vừa điền 
+
+13	Ấn nút Save cả màn hình thông tin khi chưa Save/Cancel item asset đang thao tác (edit/add new) ở phần Asset info	GAMS_Physical asset_13	Inline message, red color
+	Assets have not been saved
+
+
+
+2. Assign asset 
+2.1 Tác nhân, điều kiện, kết quả mong muốn
+Assign asset cho từng đối tượng và dự án cụ thể 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Asset, Sau đó nhấn chọn icon “More” -> chọn Assign  
+-	Kết quả mong muốn: hệ thống hiển thị màn hình chứa các thông tin tương ứng cần điền với đầy đủ các rule hiển thị và validation như mô tả bên dưới 
+2.2 UI Design
+
+
+
+
+
+
+2.3 User Interface Requirements
+No	Field name	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+1	Select Assets 	Text	--	--	--	--	Danh sách asset được assign
+View only
+Tự động hiển thị dựa trên asset đang chọn
+= Asset’s code; Nếu chọn nhiều Asset -> sắp xếp theo thứ tự như bảng asset bên ngoài 
+Cố định chiều cao 4 row => Hơn 4 row sẽ hiển thị scroll
+	Asset Recipient	Dropdown 	--	--	--	--	Đối tượng được bàn giao tài sản
+Dropdown list, fix cứng 2 giá trị:
+Company (shared assets)
+Department/Individual
+Default: Department/Individual
+	Note	Text	--	--	--	--	Ghi chú khi assign tài sản
+Sẽ hiển thị trong History của từng tài sản
+Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)	Các trường thông tin ứng với Asset Recipient = Company (shared assets)
+	From Date 	Date picker 	Date	Yes	--	Ngày thực hiện action	Thời gian bàn giao tài sản (Từ ngày..) 
+Default: ngày đang thực hiện action
+Format: yyyy/mm/dd
+Mở date picker -> chỉ available khoảng thời gian sau ngày hiện tại
+	To date 	Date picker	Date	No	--	--	Thời gian trả tài sản (Đến ngày..) 
+Placeholder: Select date
+Format: yyyy/mm/dd
+Mở date picker -> chỉ available khoảng thời gian sau ngày *From Date 
+	Assign asset to	Dropdown 	--	Yes	--	--	Dropdown + list (có hỗ trợ search)
+Placeholder: Search and select user
+Có dạng: 
+Danh sách giữ nguyên như logic cũ lấy all ldap trên hệ thống
+Cho phép nhập keyword để search Ldap cần điền -> hệ thống sẽ thực hiện lệnh search (partial search trong DB Ldap) hiển thị kết quả -> chỉ chọn 1 kết quả
+Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual	Các trường thông tin ứng với Asset Recipient = Department/Individual
+	Is the asset project-related?	Dropdown	--	--	--	--	Check quyền sở hữu của dự án
+Dropdown 2 giá trị: yes/no
+Default: No
+Các trường thông tin bên dưới bị ảnh hưởng bởi cách chọn yes/no
+	Tài sản thuộc dự án ( = Option yes)	Tài sản thuộc dự án ( = Option yes)	Tài sản thuộc dự án ( = Option yes)	Tài sản thuộc dự án ( = Option yes)	Tài sản thuộc dự án ( = Option yes)	Tài sản thuộc dự án ( = Option yes)	Tài sản thuộc dự án ( = Option yes)
+	Project name	Dropdown+ search	--	Yes	--	--	Danh sách projects 
+Lấy từ dashboard
+Format: Tên project + MVV(s) (nhiều mã vụ việc -> hiển thị hết cách nhau bởi dấu “/” )
+
+Partial text search (baseb on đk LIKE)
+Chỉ chọn một giá trị 
+	PM	Text	--	--	--	Disable	PM dự án tương ứng
+Format: full name+ tên bộ phận
+View only
+Default = disable
+Tự động hiển thị sau khi chọn Project name (Lấy từ hệ thống DB) 
+Hiển thị trong phạm vi 1 dòng > 1 dòng -> hiển thị các ký tự sau  = “...” , Hover sẽ hiện full text
+	MVV	Dropdown 	--	Yes	--	--	MVV dự án tương ứng
+Default: Disable khi chưa chọn Project name
+Khi đã chọn Project name -> Hiển thị MVV tương ứng, Nếu project có nhiều MVV-> hiển thị mã đầu tiên theo như data nhận về
+Lấy MVV còn hạn (ngày hiện tại <= end date MVV)
+Có thể chỉnh sửa được bằng cách ấn dropdown, chọn MVV ứng với dự án tương ứng (với dự án có nhiều MVV) 
+Hiển thị trong phạm vi 1 dòng > 1 dòng -> hiển thị các ký tự sau  = “...” , Hover sẽ hiện full text
+	Start Date (Form date)	Text	--	Yes	--	--	Thời gian được Assign (từ ngày)
+View only
+Default: Blank nếu chưa chọn MVV
+Tự động hiển thị theo MVV = Thời gian MVV tương ứng
+Format: yyyy/mm/dd 
+	End Date (To date)	Text	--	Yes	--	--	Thời gian được Assign (đến ngày)
+View only
+Default: Blank nếu chưa chọn MVV
+Tự động hiển thị theo MVV = Thời gian end date của MVV tương ứng
+Format: yyyy/mm/dd 
+	Assign asset to	Dropdown 	--	Yes	--	--	Dropdown + list (có hỗ trợ search)
+Có dạng: 
+Danh sách giữ nguyên như logic cũ lấy all ldap trên hệ thống
+Cho phép nhập keyword để search Ldap cần điền -> hệ thống sẽ thực hiện lệnh search (partial search trong DB Ldap) -> chỉ chọn 1 kết quả
+	Issue link 	Text field	link	Yes	--	Blank	Điền link của issue
+Validate format dưới dạng link: xxxxx.xxxx
+Placeholder: Issue link
+Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)	Tài sản không thuộc dự án ( = Option no)
+	Assign asset to	Dropdown 	--	Yes	--	--	Dropdown + list (có hỗ trợ search)
+C Dropdown + list (có hỗ trợ search)
+Có dạng: 
+Danh sách giữ nguyên như logic cũ lấy all ldap trên hệ thống
+Cho phép nhập keyword để search Ldap cần điền -> hệ thống sẽ thực hiện lệnh search (partial search trong DB Ldap) -> chỉ chọn 1 kết quả
+
+	From Date 	Date picker 	Date	Yes	--	ngày đang thực hiện action	Thời gian bàn giao tài sản (Từ ngày..) 
+Default: ngày đang thực hiện action
+Format: yyyy/mm/dd
+Mở date picker -> chỉ available khoảng thời gian sau ngày hiện tại
+	To date 	Date picker	Date	Yes
+	--	Blank	Thời gian trả tài sản (Đến ngày..) 
+Placeholder: Select date
+Format: yyyy/mm/dd
+Mở date picker -> chỉ available khoảng thời gian sau ngày *From Date 
+Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.	Location 
+Note: Các trường Nation, city, building, floor phụ thuộc vào nhau, Check sự phụ thuộc theo các nhánh cha con tương ứng.
+vd chọn trường City trước -> auto điền trường nation và nhánh con bên dưới building/ floor giá trị dropdown sẽ thay đổi theo selection bên trên.
+	Nation 	Dropdown+ search selection	--	Yes	--	--	Chọn Nation mà asset sẽ được assign
+Hiển thị list nation có trạng thái active trên hệ thống GAMS (Trong phần location) - lấy từ OMS 
+	City	Dropdown+ search selection	--	Yes	--	--	Chọn city mà asset sẽ được assign
+Hiển thị list city có trạng thái active trên hệ thống GAMS (Trong phần location) - lấy từ OMS 
+	Building	Dropdown+ search selection	--	Yes	--	--	Chọn Building mà asset sẽ được assign
+Hiển thị list building có trạng thái active trên hệ thống GAMS (Trong phần location) - lấy từ OMS 
+	Floor	Dropdown+ search selection	--	Yes	--	--	Chọn floor mà asset sẽ được assign
+Hiển thị list floor có trạng thái active trên hệ thống GAMS (Trong phần location) - lấy từ OMS 
+	Assign 	Button	--	--	--	--	Hiển thị thông báo refer to 2.6 Message List
+Các tác vụ khác, mục 3 phần 2.4 Work Flow
+	Cancel 	Button	--	--	--	--	Hiển thị pop up, refer to 2.6 Message List
+
+
+
+
+2.4 Work Flow
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action  	User	Từ màn hình Danh sách Asset (tab asset) , chọn icon “More” -> Chọn option “Assign”
+->Hệ thống hiển thị màn hình chứa các thông tin cần điền 
+2	Assign	User	Người dùng tiến hành điền thông tin Assign Asset, lưu ý những BR dưới đây:
+1. Có thể Assign một asset/ Nhiều asset trong 1 lần. 
+Có thể Assign asset ở màn danh sách bên ngoài bằng cách click icon trên line tương ứng-> chọn Assign (Luồng chính) 
+or Trong màn view detail chọn icon -> Chọn action “Assign” 
+or Chọn nhiều Asset bằng nút check box  -> Chọn trên header của bảng danh sách (cạnh thanh search)  -> Chọn action “Assign” 
+Chỉ available option Assign với tài sản có Status là : New asset or Available  -> Khi chọn nhiều asset nhưng có 1 asset k hợp lệ vẫn k thực hiện được Action.
+2. Trường hợp tài sản được chọn có tài sản liên kết (associated asset), khi user lưu thông tin bàn giao, cập nhật đồng thời cho tất cả các tài sản đó.
+3	Confirm or Cancel	User	Người dùng có thể dừng action  bằng cách ấn Cancel, chi tiết mô tả bên dưới mục 2.6 2.6 Message List
+Note: Sau khi bàn giao tài sản thành công 
+Trạng thái của tài sản chuyển thành Pending confirmation
+Cập nhật DB thông tin owner (là người nhận bàn giao), thời gian mượn. 
+Gửi thông báo confirm đến người dùng Qua Email, Qua Teams (Content)
+Trên Gams sẽ cập nhật màn hình thông tin khi người dùng ấn vào link confirm (theo logic cũ) 
+
+
+2.5 Content
+2.5.1 Content cho Teams
+Asset Usage Confirmation
+Dear [Full Name] ,
+
+We kindly request your confirmation regarding the usage of the following assets:
+1. Asset ID1 :  [“Asset code” field]
+Asset Name: [“Asset name” field]
+From date: [“From date” field]
+To date: [“To date” field]
+Project Name: [“Project name” field]
+MVV : [“MVV” field]
+2. Asset ID2 :  [“Asset code” field]
+Asset Name: [“Asset name” field]
+From date: [“From date” field]
+To date: [“To date” field]
+Project Name: [“Project name” field]
+MVV : [“MVV” field]
+
+Important Notes:
+Please confirm within 3 days upon receiving this email. After this period, the asset management department will proceed with asset retrieval to ensure proper asset management.
+Take good care and maintain the assigned assets.
+Follow the proper procedure for returning assets upon resignation.
+
+For further details, please click on the following link.
+
+If you have already confirmed the asset usage, kindly disregard this ticket.
+
+Thank you for your attention to this notification.
+Yours sincerely, 
+“Confirm” button
+
+2.5.2 Content cho Email 
+
+[GAMS] Asset Assignment
+Dear [Full Name] ,
+
+We kindly request your confirmation regarding the usage of the following assets below.
+
+Important Notes:
+Please confirm within 3 days upon receiving this email. After this period, the asset management department will proceed with asset retrieval to ensure proper asset management.
+Take good care and maintain the assigned assets.
+Follow the proper procedure for returning assets upon resignation.
+
+No	Code	Name	From	To	Project name	MVV
+1	Asset ID1 :  [“Asset code” field]	Asset Name: [“Asset name” field]
+	 [“From date” field]	 [“To date” field]	[“Project name” field]	[“MVV” field]
+2	Asset ID2 :  [“Asset code” field]	Asset Name: [“Asset name” field]
+	[“From date” field]	 [“To date” field]	[“Project name” field]	[“MVV” field]
+
+
+                                           “Click to Confirm” button + “View detail” button
+                                    
+Thank you for your attention to this notification.
+Yours sincerely, 
+
+2.5.3 Action
+Khi click “Confirm” button ở Teams => Update status của thông báo trên Teams từ “Đã yêu cầu” sang “Confirm” => Chuyển trạng thái tài sản sang “In Use”
+Khi click “Click to Confirm” button ở Mail => Thực hiện hành động confirm các tài sản được thông báo đến
+Thành công: Hiển thị thông báo confirm thành công => Chuyển trạng thái tài sản sang “In Use”
+Tài sản đã confirm: Hiển thị tài sản đã được confirm
+Tài sản đã return/assign cho người khác: Hiển thị thông báo lỗi
+Khi click “click on the following link“ ở Teams hoặc “View detail” button ở Mail => Mở link đến GAMS system màn view detail của ldap nhận thông báo (https://gams.cmcglobal.com.vn/asset?name={ldap})
+2.6 Message List
+No	Context	Code	Type 	Content
+1	Khi chọn assign tài sản có checked: associated asset 	GAMS_Assign_01	Popup cảnh báo  	
+Click Cancel = kết thúc action
+Click ok = hiển thị popup điền thông tin assign tài sản, tài sản đính kèm sẽ được assign cùng tài sản đang chọn hiện tại 
+2	Khi bỏ trắng các trường required	GAMS_Physical asset_04	Inline message, red color	{Tên trường} is required 
+3	Sau khi assign Asset thành công 	GAMS_Assign_02	Toast message 	
+A confirmation email has been sent to account {Dlap}
+
+
+
+3. Return asset
+3.1 Tác nhân, điều kiện, kết quả mong muốn
+Return asset với những status cụ thể 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, Chọn tab Asset, Sau đó nhấn chọn icon “More” -> chọn Return
+-	Kết quả mong muốn: hệ thống hiển thị màn hình chứa các thông tin tương ứng cần điền với đầy đủ các rule hiển thị và validation như mô tả bên dưới  
+3.2 UI Design
+
+3.3 User Interface Requirements
+No	Field name	Kiểu hiển thị	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+1	Select Assets 	Text	--	--	--	--	Danh sách asset được return 
+View only
+Tự động hiển thị dựa trên asset đang chọn
+= Asset’s code; Nếu chọn nhiều Asset -> sắp xếp theo thứ tự như bảng asset bên ngoài 
+	Return to Admintrator's Store	dropdown+ selection	--	Yes	--	--	Danh sách store
+Hiển thị danh sách store trong hệ thống có trạng thái active
+Mặc định hiển thị store được mark là default (trong phần store)
+	PIC	text	--	--	--	--	Tên người đại diện kho
+view only
+auto hiển thị dựa trên store được chọn bên trên
+nếu store chưa được chọn -> disable & no data
+Location	Location	Location	Location	Location	Location	Location	Location
+	Nation	text	--	--	--	--	Nation theo store được chọn ở “Return to Admintrator's Store”
+View only 
+	City	text	--	--	--	--	City theo store được chọn ở “Return to Admintrator's Store”
+View only 
+	Building	text	--	--	--	--	Building theo store được chọn ở “Return to Admintrator's Store”
+View only 
+	Floor 	text	--	--	--	--	Floor theo store được chọn ở “Return to Admintrator's Store”
+View only 
+	Cancel 	Button	--	--	--	--	Huỷ action hiện tại
+Hiển thị pop up, refer to 3.5 Message List
+	Return	Button 	--	--	--	--	Lưu action 
+Tiến hành return sản phẩm về kho refer to 3.4 Work Flow
+
+
+3.4 Work Flow 
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action  	User	Từ màn hình Danh sách Asset (tab asset) , chọn icon “More” -> Chọn option “Return”
+->Hệ thống hiển thị màn hình chứa các thông tin cần điền 
+2	
+Nhập thông tin Return	User	Người dùng nhập thông tin Return Asset, lưu ý dựa trên các BR dưới đây:
+
+Có thể Return một asset/ Nhiều asset trong 1 lần. 
+Return nhiều asset trong 1 lần (nếu muốn return về cùng 1 store) 
+Có thể Return asset ở màn danh sách bên ngoài bằng cách click icon trên line tương ứng-> chọn Return (Luồng chính) 
+or Trong màn view detail chọn icon -> Chọn action “Return” 
+or Chọn nhiều Asset bằng nút check box  -> Chọn trên header của bảng danh sách (cạnh thanh search)  -> Chọn action “Return” 
+Chỉ available option Return với tài sản có Status là : Pending Confirmation, In Use, Under Repair 
+-> Khi chọn nhiều asset nhưng có 1 asset k hợp lệ vẫn k thực hiện được Action.
+
+3	Cancel or Confirm	User	Người dùng có thể ấn cancel nếu muốn dừng hành đông, refer to 3.5 Message List
+Or save, lưu ý Sau khi ấn Save và return thành công -> tắt popup, Đổi status của các asset tương ứng thành “Available”, lưu lịch sử và thay đổi dưới DB+ báo message thành công, refer to 3.5 Message List
+
+
+
+3.5 Message List
+No	Context	Code	Type 	Content
+1	Ấn cancel khi đã chọn Store để return	GAMS_returnasset_01	popup	“Are you sure you want to cancel this action” + yes/no question -> Ấn yes để đóng 2 popup và quay về màn trước đó
+                 -> ấn no để đóng popup hiện tại
+2	Ấn Return và return sản phẩm thành công 	GAMS_returnasset_02	toast message 	Return asset(s) successfully.
+
+
+
+4. View detail tài sản (Physical asset)
+4.1 Tác nhân, điều kiện, kết quả mong muốn
+Xem chi tiết tài sản 
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, có Role tương ứng được truy cập vào màn view danh sách tài sản/ chọn tab Asset
+                                          Tại màn view người dùng ấn vào tên( mã code) của asset 
+-	Kết quả mong muốn: Hiển thị thông tin ứng với Asset người dùng vừa ấn, Mọi thông tin trong phần view detail đều có dạng View only 
+                                                  Không có giá trị -> hiển thị N/A
+
+
+4.2 UI Design
+
+
+
+
+4.3 User Interface Requirements
+No	Tên	Kiểu hiển thị 	Kiểu dữ liệu	Required	Độ dài max	Mặc định 	Description
+General 	General 	General 	General 	General 	General 	General 	General 
+	Code	text 	number	--	--	--	Hiển thị code của sản phẩm (code hệ thống đã tự gen trước đó) 
+	Type 	text	text	--	--	--	Hiển thị type của asset đã được set từ trước
+= giá trị trường Type 
+	Name 	text	text	--	--	--	Hiển thị tên của Asset đã được đặt trước đó
+Tối đa hiển thị trong 3 lines-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Asset name
+	Group 	text	text	--	--	--	Hiển thị type của group đã được set từ trước
+= giá trị trường Asset Group
+	Unit 	text	text	--	--	--	Hiển thị tên đơn vị đã được set từ trước
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Unit 
+	Guest name	text	text	--	--	--	Hiển thị tên guest đã được set từ trước
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Guest name:
+Nếu asset không phải thuộc guest (không select giá trị guest asset) -> Hiển thị giá trị None
+Ngược lại -> k có data hiển thị N/A, có data hiển thị thông tin get được 
+ 	Hired asset	checkbox	--	--	--	--	Hiển thị status (checked hoặc unchecked)
+= Giá trị trường Hired asset
+	Syn SAP	checkbox	--	--	--	--	Hiển thị status (checked hoặc unchecked)
+= Giá trị trường Syn SAP
+	Note 	text	text	--	--	--	Hiển thị note đã được báo trước đó
+Tối đa hiển thị trong 3 lines-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Note
+	Associated Asset	text	number 	--	--	--	= giá trị trường Associated asset
+Có tsan đính kèm -> hiển thị tên tài sản (mã code)
+không có tsan đính kèm -> hiển thị None
+	Serial 	text	text	--	--	--	= giá trị trường serial 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	MAC- Ethenet	text	number 	--	--	--	= giá trị trường Mac- ethenet
+
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text
+	Assignment 	Assignment 	Assignment 	Assignment 	Assignment 	Assignment 	Assignment 
+	Status	text	text	--	--	--	Status của asset
+= giá trị trường status của asset
+	Store 	text	text	--	--	--	Tên store 
+= giá trị trường store gắn với Asset
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Company	text	text	--	--	--	Tên ngắn gọn company tương ứng 
+= giá trị trường Company gắn với asset
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+	Company name 	text	text	--	--	--	Tên riêng của company
+= giá trị trường Company name gắn với asset
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+	Owner 	text	text	--	--	--	Tên người sở hữu
+= giá trị trường Assign to/PIC Store
+
+	DU	text	text	--	--	--	Tên DU thuộc Owner 
+Lấy từ thông tin DU của owner
+	From 	text	date	--	--	--	Ngày được assign tài sản (từ ngày..) 
+format: yyyy/mm/dd
+= giá trị trường “From Date” 
+	To	text	date	--	--	--	Ngày được assign tài sản (đến ngày..) 
+format: yyyy/mm/dd
+= giá trị trường “To Date” 
+	Asset Recipient	text	text	--	--	--	Loại đối tượng nhận tài sản
+= Giá trị trường Asset Recipient
+	Is the asset project-related?	text	giá trị yes/no 	--	--	--	Thường mang giá trị yes/no
+= Giá trị trường Tài sản có thuộc dự án không?
+Chỉ hiển thị nếu trường Asset Recipient = Giá trị “Department/Individual” 
+	Issue link 	text	link 	--	--	--	Link của issue
+= Giá trị trường Issue link
+Chỉ hiển thị nếu trường Is the asset project-related?  = Giá trị “Yes” 
+	Project name	text	text	--	--	--	Tên project 
+= Giá trị trường Project name 
+Chỉ hiển thị nếu trường Is the asset project-related?  = Giá trị “Yes” 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	MVV	text	number	--	--	--	Mã vụ việc tương ứng
+= Giá trị trường MVV
+Chỉ hiển thị nếu trường Is the asset project-related?  = Giá trị “Yes” 
+	Tên PM	text	text	--	--	--	Tên PM 
+= Giá trị trường PM
+Chỉ hiển thị nếu trường Is the asset project-related?  = Giá trị “Yes” 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Location 	Location 	Location 	Location 	Location 	Location 	Location 
+	Nation	text	text	--	--	--	Tên Nation ứng với location
+= giá trị trường Nation 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Building	text	text	--	--	--	Tên building ứng với nation
+= giá trị trường Building
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	City	text	text	--	--	--	Tên City ứng với Building
+= giá trị trường City
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Floor	text	text	--	--	--	Tên Floor ứng với City 
+= giá trị trường Floor 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Purchasing	Purchasing	Purchasing	Purchasing	Purchasing	Purchasing	Purchasing
+	Manufacturer	text	text	--	--	--	Tên hãng sản xuất
+= giá trị trường Manufacturer
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Supplier	text	text	--	--	--	Tên nhà cung ứng 
+= giá trị trường Supplier
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Price ({Currency})	text	number	--	--	--	Giá thành sản phẩm 
+= giá trị trường Price
+{Currency} = giá trị trường Currency
+	VAT Rate(%)	text	number	--	--	--	% VAT Rate
+= giá trị trường VAT Rate(%)
+	Warranty (Months)	text	number	--	--	--	Khoảng thời gian bảo hành
+= giá trị trường Warranty
+	Purchase Date	text	Date	--	--	--	Thời gian chi trả cho sp 
+= giá trị trường Purchase Date
+	Expiration Date	text	Date	--	--	--	Thời gian hết hạn sản phẩm 
+= giá trị trường Expiration Date 
+	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation
+	C-Confidentiality	text	number 	--	--	--	Đánh giá mức độ bảo mật thông tin
+Chưa có dữ liệu nếu là New asset 
+	I-Integrity	text	number 	--	--	--	Đánh giá mức độ đảm bảo tính toàn vẹn 
+Chưa có dữ liệu nếu là New asset
+	A-Availability	text	number	--	--	--	Đánh giá mức độ đảm bảo tính khả dụng
+Chưa có dữ liệu nếu là New asset
+	C + I + A	text	number	--	--	--	Tổng 3 giá trị trên
+Auto tính 
+Chưa có dữ liệu nếu là New asset
+	Importance	text	text	--	--	--	Tính quan trọng 
+Chưa có dữ liệu nếu là New asset
+Tự động đánh giá dựa trên các giá trị C, I, A 
+	Note	text	text	--	--	--	Hiển thị note của CIA (nếu có)
+Chưa có dữ liệu nếu là New asset
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Invoice	Invoice	Invoice	Invoice	Invoice	Invoice	Invoice
+	Form	text	text	--	--	--	Form của invoice 
+= giá trị trường Invoice Form 
+	No	text	number	--	--	--	No của invoice 
+= giá trị trường Invoice No
+	Currency	text	đơn vị	--	--	--	Đơn vị tiền tệ được tính
+= Giá trị trường Currency
+	Invoice Date	text	date	--	--	--	Date của invoice 
+= giá trị trường Invoice Date 
+	Serial	text	date	--	--	--	Serial của invoice 
+= giá trị trường Invoice Serial
+	Action	Action	Action	Action	Action	Action	Action
+	Edit 	Button	 --	--	--	--	Edit asset 
+Click => Mở luồng Edit Asset
+
+	Edit invoice	Button	 --	--	--	--	Edit invoice
+Click => Mở luồng Edit invoice
+		Icon button 	  --	--	--	--	Hiển thị các option, bao gồm:
+Assign
+Return
+Site transfer
+Malfunction report
+Repair
+Liquidate
+Check out
+Loss report
+Confirm
+QRcode print
+Enable các action tương ứng với status (giữ nguyên logic cũ)
+
+4.4 Business Rules
+Mọi thông tin trong phần view detail đều có dạng View only 
+Không có giá trị -> hiển thị N/A
+Không được hiển thị sẽ được thể hiện trên giao diện dưới dạng làm mờ với giá trị N/A
+Action “Confirm” chỉ Enable với Owner của Asset ở Status “Pending Confirmation” và “Confirm overdue”
+4.5 Work Flow
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	User truy cập màn danh sách asset 	User đã đn hệ thống 	Người dùng chọn Tab asset 
+
+2	User truy cập màn view detail 	user 	Người dùng ấn vào tên một Asset bất kỳ trong danh sách  (code name) 
+3	Hiển thị thông tin detail asset 	Hệ thống 	Hệ thống hiển thị màn detail asset với các thông tin mô tả bên trên 
+4	Xác nhận tài sản	User	Người dùng ấn Confirm button -> Hiển thị message thông báo GAMS_DetaiAsset_01 -> Chuyển trạng thái tài sản sang In Use
+
+4.6 Message List
+No	Context	Code	Type 	Content
+1	Ấn save "Confirm”	GAMS_DetaiAsset_01	toast message 	Confirm tài sản thành công
+
+
+
+5. Edit Invoice (Physical asset)
+5.1 Tác nhân, điều kiện, kết quả mong muốn
+Edit thông tin tài sản
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, có Role tương ứng được truy cập vào màn view danh sách tài sản/ Chọn tab Asset
+                                          Tại màn view người dùng ấn vào tên( mã code) của asset 
+                                          Trong màn view detail người dùng ấn Edit invoice button 
+-	Kết quả mong muốn: Hệ thống hiển thị thông tin các trường và mở các trường thông tin (có mô tả bên dưới) từ dạng view only sang editable
+5.2 UI Design
+
+
+5.3 User Interface Requirements
+No	Tên	Kiểu hiển thị 	Kiểu dữ liệu	Required	Độ dài max	Editable? 	Description
+Invoice detail	Invoice detail	Invoice detail	Invoice detail	Invoice detail			
+	Invoice Form 	Text field	
+Text  	Yes	25	Yes	Form của invoice
+Type > 25 ký tự -> không hiển thị thêm
+	Invoice Serial 	Text field	Text	Yes	8	yes	Serial của invoice
+Unique
+Type > 8 ký tự -> không hiển thị thêm
+	Invoice No	Text field	Number	Yes	10	yes	No của invoice
+Unique
+Type > 10 ký tự -> không hiển thị thêm
+	Invoice Date	Date picker	Date	Yes	--	yes	Ngày tạo invoice
+Có dạng date picker
+Click vào box -> mở date picker
+Chỉ chọn 1 ngày ( available mọi khoảng thời gian)
+format: yyyy/mm/dd
+	Purchase Date	Date picker	Date	No	--	yes	Ngày chi trả cho Asset
+Có dạng date picker 
+Click vào box -> mở date picker 
+Chỉ chọn 1 ngày ( available mọi khoảng thời gian)
+Placeholder: Select date
+Formay: yyyy/mm/dd
+	File invoice (Upload)	Button	  --	No	--	yes	Button dùng để upload file 
+Format supported: png, jpeg, jpg, pdf
+Max : 3MB 
+	File invoice (list uploaded) 	List	  --	  --	--	yes	Danh sách file được upload
+Hiển thị max trong khoảng cách 1 dòng được quy định
+> 1 line, thay các ký tự còn lại = “...”, hover hiển thị full text
+Format:    trong đó (image_12345 = Name) 
+Sắp xếp theo thứ tự thời gian
+“x” = tự động delete sau khi ấn
+Hover hiển thị tooltip full name file
+	Link e_voice	Text field	Text link	No	--	yes	Link của e_voice
+Format: xxx. xxx (link’s format)
+icon để thêm mới, click để add link đang nhập
+	Link e_voice (danh sách) 	list 	  --	  --	--	yes	Danh sách các Link e_voice
+Sắp xếp theo thứ tự thời gian
+Hiển thị max trong khoảng cách 1 dòng được quy định
+> 1 line, thay các ký tự còn lại = “...”,hover hiển thị full text
+“x” = tự động xoá sau khi ấn
+Hover hiển thị tooltip full link
+	Total VAT amount 	Text field	number	Yes	150	yes	Tổng số tiền VAT
+= Tổng số tiền VAT Amount Detail
+Phân chia các đơn vị bằng dấu “.”
+Type > 150 ký tự -> không hiển thị thêm
+	Total amount 	Textfiel 	number	yes	150	yes	Tổng số tiền
+Type > 150 ký tự -> không hiển thị thêm
+	Currency 	dropdown	text	yes		yes	 Đơn vị tiền tệ
+Gồm các giá trị fix cứng:
+VND
+USD
+JPY
+EUR
+SGD
+AUD
+KRW
+MYR
+	VAT table	VAT table	VAT table	VAT table	VAT table	VAT table	VAT table
+	VAT rate 	text field	number	yes	50	yes	% giá trị VAT
+Type > 50 ký tự -> không hiển thị thêm
+	VAT amount 	text field	number	yes	150	yes	Giá trị VAT ứng với từng rate
+Type > 150 ký tự -> không hiển thị thêm
+	Add filed 	button	  --	  --	--	yes	Thêm một line để nhập VAT rate + VAT amount
+	Delete icon	button	  --	  --	--	yes	Xoá line tương ứng
+General information             	General information             	General information             	General information             	General information             	General information             	General information             	General information             
+	Company	Search selection dropdown	  --	Yes	--	no	Company gắn với asset 
+Danh sách dropdown là danh sách Company được tạo và lưu ở phần Company trên hệ thống, = giá trị trường Company
+	Company name	text	text	Yes	--	no	Tên chi tiết company gắn với Asset 
+Auto hiển thị theo việc chọn company
+	Supplier	Search selection dropdown	  --	Yes	--	yes	 Nhà cung cấp của asset 
+Danh sách dropdown là danh sách Supplier được tạo và lưu ở phần Supplier trên hệ thống, = giá trị trường Supplier
+	Tax Code	Text	text	Yes	--	no 	Tax code hiển thị theo thông tin nhà CC
+	Store	Dropdown + search	  --	Yes	--	no	Store gắn với Asset
+User có thể tìm kiếm và chọn tên Store từ danh sách Location- Store tại module Setting
+	Building 	Dropdown + search	  --	Yes	--	no	Builidng gắng với Asset 
+	Syn SAP	Check box	  --	  --		yes	 Gửi thông tin asset qua SAP
+○        Check = Đồng bộ tất cả asset trong invoice sang SAP
+○        Uncheck = Không đồng bộ tất cả asset trong invoice sang SAP
+Thể hiện việc đồng bộ sang SAP bằng cách hiển thị dot ở sau Code ngoài màn list asset:
+○        Màu xanh: Đã sang SAP
+○        Màu cam: Chưa sang SAP
+	Image check list 	list 	file uploaded 	--	--	yes	Danh sách image của asset được upload 
+Danh sách file được upload 
+Hiển thị max trong khoảng cách 1 dòng được quy định 
+> 1 line, thay các ký tự còn lại = “...”, hover hiển thị full text 
+Format:   trong đó (image_12345 = Name)  
+Sắp xếp theo thứ tự thời gian 
+“x” = tự động delete sau khi ấn 
+	File image asset (Upload) 	button	--	--	--	yes	Button dùng để upload file  
+Format supported: png, jpeg, jpg, pdf 
+Max : 3MB  
+
+	Note check 	text field	text 	no	250	yes	= giá trị trường note trong Popup đã kiểm tra kỹ tài sản 
+type > maxlenghth -> k hiển thị thêm
+Hiển thị tối đa trong 3 lines, > 3 lines thay bằng …, hover hiển thị full text 
+Khi đang chỉnh sửa mà nhập > 3 lines -> hiển thị thanh scroll dọc 
+	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset	Asset Infor: : - Cố định 2 cột đầu No., Asset Name và 1 cột cuối Action => Scroll ngang các cột ở giữa
+- Cố định chiều cao của table (hiển thị 10 item) => Quá 10 item sẽ scroll dọc
+- Không thể thêm mới Asset
+	Add asset	Button 	  --	  --	--	--	Disable 
+	No. 	text 	number	  --	--	no	STT, sắp xếp theo thứ tự thời gian
+Start = 1
+	Asset name 	Text field 	text	Yes	500	yes	Tên tài sản
+> 500 ký tự -> k hiển thị thêm
+Asset name sau khi lưu sẽ hiển thị dưới dạng text field -> click vào để xem thông tin của từng tài sản
+Trong  phạm vi 1 line khi hiển thị trên cột, các ký tự còn lại thay = “…”, hover sẽ hiển thị full text
+Nếu đang nhập thì max hiển thị trong 3 line, có thanh cuộn docj để kéo xem full text
+Hover hiển thị tooltip full name
+	Popup tương ứng khi ấn Asset name 	Popup 	  --	  --	--	--	Hiển thị popup khi chọn
+Tên Asset = tên Asset hiển thị trên cột (vừa được điền), Hiển thị max trong 2 line, các ký tự còn lại thay bằng “…”
+Hover hiển thị tooltip full name
+No và Code tự sinh, với Code -> tự động hiển thị theo quy tắc refer to 5.5 Work Flow
+Cột Serial và Associate & Mac hiện dưới dạng text field, không bắt buộc điền, maxlength =150
+ điền > maxlength -> k cho điền thêm
+- Cột Serial
+Cho phép chỉnh sửa
+- Cột Associated Asset
+Chỉ cho phép input khi tại Setting Asset group có checked “Can be associated”
+Gõ ký tự = search trong list Tài Sản, có validation
+Điền sai -> báo lỗi Invalid Data.
+Cho phép chỉnh sửa
+         	- Cột MAC- Ethenet
+Chỉ cho phép input khi tại Setting Asset group có checked “MAC-Ethenet”
+Cancel button -> huỷ hành động, nếu đang có thông tin đã điền sẽ hiển thị thêm 1 popup có nội dung
+“Are you sure you want to cancel this action” + yes/no question:
+Ấn yes để đóng 2 popup và quay về màn thêm mới
+Ấn no để đóng popup hiện tại
+Cho phép chỉnh sửa
+Save button -> Lưu thông tin vừa nhập
+	Hired Asset 	Check box	  --	  --	--	no	Đánh dấu tài sản được thuê hay không
+	Guest 	Check box	  --	  --	--	no	Tích chọn Guest => Enable Guest name
+	Guest name 	Text field	text	no	250	no	Điền thông tin guest name
+Default -> disable
+ Chỉ enable khi tích chọn Guest
+ điền > Maxlength -> không chèn thêm ký tự nào
+Hiển trị trong khoảng cách 1 dòng, các ký tự sau (nếu có) thay bằng “...” -> Hover hiển thị tooltip full name
+	Asset group 	Dropdown+search selection	  --	Yes	--	no	●	Chọn asset group 
+●	User có thể tìm kiếm và chọn tên Asset group từ danh sách Asset group tại module Setting
+●	 = trường Asset group name 
+	Unit 	Text field	text	Yes	50	yes	Điền tên đơn vị tính
+> Maxlength: k lưu các ký tự sau
+	Quantity	Text field	number	Yes	50	no	Điền số lượng
+> Maxlength: k lưu các ký tự sau
+	Price 	Text field	number	Yes	150	yes	 Điền giá thành
+> Maxlength: k lưu các ký tự sau
+	VAT Rate (%)	Text field	number	Yes	50	yes	Điền rate của VAT
+> Maxlength: k lưu các ký tự sau
+	Manufacturer	Dropdown+search selection	text	Yes	--	yes	●        Lựa chọn nhà sản xuất
+●        User có thể tìm kiếm và chọn tên Manufacturer từ danh sách tại module Setting
+●        Chỉ được chọn 1 Manufacturer
+Placeholder: Manufacturer
+	Warranty (Month)	Text field	number	No	50	yes	●        Thời hạn bảo hành
+●     > Maxlength: k lưu các ký tự sau
+	Expiration Date	Date picker	date	No 	--	yes	●        Thời gian hạn sử dụng
+●        Placeholder: Expiration Date
+●        Default:
+○        Blank: Khi chưa nhập “Invoice date”
+○        Invoice date + 12 month: Khi đã nhập “Invoice date”
+●        Chỉ available những ngày sau ngày “Invoice date”
+●        Có thể chỉnh sửa
+●        Khi thay đổi Warrantly thì tự động cập nhật Exporation Date
+
+	Note	Text field	text	No	250	yes	 Note cho tài sản
+  > maxlength -> không điền các ký tự sau
+	Action	Icon Button	  --	  --	--	yes	Các action được thực hiện
+ Các options:
+Edit:
+= chỉnh sửa thông tin, Mở trường thông tin thành dạng có thể chỉnh sửa được để tiến hành sửa Logic edit được viết ở 5.5 Work Flow
+Enable Cho phép thực hiện
+Remove from list:
+Xoá asset khỏi list (Hiển thị popup, mô tả thêm ở phần dưới 5.6 Message List)
+Disbale không cho phép thực hiện
+	Cancel	button	  --	  --	--	--	Cancel hành động 
+Refer to 5.5 Work Flow
+	Save	button 	  --	  --	--	--	Save thay đổi
+Refer to 5.5 Work Flow
+
+
+5.4 Business Rules
+Hiển thị giá trị mặc định là những thông tin đã được nhập trước đó, không có giá trị và không chỉnh sửa được -> Giá trị N/A; Không có giá trị và chỉ sửa được -> chuyển trạng thái trường đó sang blank (editable) 
+Sau khi asset được edit, mọi thông tin tương ứng sẽ được thay đổi (bao gồm tất cả asset của lô asset đó ở màn danh sách asset và màn view detail)
+Có thể edit invoice trong mọi trường hợp 
+5.5 Work Flow 
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Mở màn edit thông tin invoice	User	User ấn button Edit invoice 
+2	Nhập thông tin thay đổi	User	Nhập thông tin cần thay đổi
+Các thông tin Invoice detail và General, product infor sẽ dựa theo mô tả bên trên
+Lưu ý khi edit thông tin asset -> Mã code sẽ được giữ nguyên; các thông tin thay đổi sẽ được cập nhật dưới DB và những phần liên quan (danh sách tài sản, tài sản thông tin detail) 
+3	Cancel 	User	User ấn cancel button 
+Hiển thị message GAMS_editIV_01 
+refer to 5.6 Message List
+4	Save 	User 	User ấn save button , hiển thị message GAMS_editIV_02
+Mọi thông tin tương ứng sẽ được cập nhật cả trên giao diện hệ thống và DB (Giao diện: bao gồm cả màn danh sách asset và màn view detail của những asset vừa được chỉnh sửa
+
+5.6 Message List
+
+No	Context	Code	 Type	Content
+1	Type vượt quá maxlength của invoice form	GAMS_Physical asset_01	Inline message, red color	Makes Form required having at most 25 characters
+2	Type vượt quá maxlength của invoice serial	GAMS_Physical asset_02	Inline message, red color	Makes Serial required having at most 8 characters
+3	Type vượt quá maxlength của invoice no	GAMS_Physical asset_03	Inline message, red color	Makes No required having at most 10 characters
+4	Khi bỏ trắng các trường required	GAMS_Physical asset_04	Inline message, red color	{Tên trường} is required
+5	File upload sai format của file invoice	GAMS_Physical asset_05	toast message	File format is not correct, only png, jpeg, jpg, pdf format is supported
+5.1	File upload sai format trong popup sau khi ấn save	GAMS_Physical asset_05	toast message	File format is not correct, only png, jpeg, jpg, pdf format is supported
+5.2	 File upload > max size (3MB) 	GAMS_Physical asset_052 
+ 	toast message 
+ 	File upload failed. The maximum file size allowed is 3MB.  
+6	Khi invoice Serial or invoice No bị trùng
+- Check trong list các invoice serial đc lưu trong hệ thống
+- Tương tự với Invoice No
+	GAMS_Physical asset_06	Inline message, red color	Invoice already exists
+7	Link evoice không hợp lệ	GAMS_Physical asset_07	Inline message, red color	Link url invalid
+8	Nếu total VAT amount không bằng tổng VAT amout detail	GAMS_Physical asset_08	Popup	
+10	Khi tổng giá trị invoice khác tổng giá trị product + Vat	GAMS_Physical asset_09	Popup cảnh bảo	Click save = vẫn lưu asset và invoice
+ Cancel = tắt popup
+
+11	Khi ấn cancel	GAMS_editIV_01 	popup 	“Are you sure you want to cancel this action” + yes/no button -> Ấn yes để đóng popup và quay về màn view detail
+                 -> ấn no để đóng popup hiện tại
+12	Khi ấn Save 	GAMS_editIV_02	toast message 	Invoice’s information is updated successfully. 
+
+
+
+6. Edit asset (Physical asset) 
+6.1 Tác nhân, điều kiện, kết quả mong muốn
+Chỉnh sửa thông tin Asset
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước:  Tại màn view detail thông tin asset người dùng ấn button “Edit”                                            
+-	Kết quả mong muốn: Mở các trường thông tin tương ứng có cho chỉnh sửa để người dùng tiến hành chỉnh sửa, có validation và update theo thông tin mới 
+6.2 UI Design
+
+6.3 User Interface Requirements
+No	Tên	Kiểu hiển thị 	Kiểu dữ liệu	Required	Độ dài max	Editable?	Description
+General 	General 	General 	General 	General 	General 	General 	General 
+	Code	text 	number	--	--	No	Hiển thị code của sản phẩm (code hệ thống đã tự gen trước đó) 
+	Type 	text	text	--	--	No	Hiển thị type của asset đã được set từ trước
+= giá trị trường Type 
+	Name 	text	text	– 	--	No	Hiển thị tên của Asset đã được đặt trước đó
+Tối đa hiển thị trong 3 lines-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Asset name
+	Group 	text	text	--	--	No	Hiển thị type của group đã được set từ trước
+= giá trị trường Asset Group
+	Unit 	text	text	--	--	No	Hiển thị tên đơn vị đã được set từ trước
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Unit 
+	Guest name	text	text	--	--	No	Hiển thị tên guest đã được set từ trước
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+= giá trị trường Guest name:
+Nếu asset không phải thuộc guest (không select giá trị guest asset) -> Hiển thị giá trị None
+Ngược lại -> k có data hiển thị N/A, có data hiển thị thông tin get được 
+	Hired asset	checkbox	--	--	--	No	Hiển thị status (checked hoặc unchecked)
+= Giá trị trường Hired asset
+	Syn SAP	checkbox	--	--	--	No	Hiển thị status (checked hoặc unchecked)
+= Giá trị trường Hired asset
+	Note 	text field	text	No	500	Yes	Hiển thị note đã được báo trước đó
+Tối đa hiển thị trong 3 lines-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+Type> maxlength -> k lưu các ký tự sau 
+= giá trị trường Note
+	Associated Asset	text field	number 	no	150	yes	= giá trị trường Associated asset
+Chỉ cho phép edit khi tại Setting Asset group có checked “Associated Asset” nếu không -> Hiển thị giá trị None
+Có tsan đính kèm -> hiển thị tên tài sản (mã code)
+Type > 150 -> không hiển thị ký tự sau 
+	Serial 	text field	text	No 	30	Yes	= giá trị trường serial 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+Type > 150 -> không hiển thị ký tự sau 
+	MAC- Ethenet	text field	number 	no	150	yes	= giá trị trường Mac- ethenet
+
+Chỉ cho phép edit khi tại Setting Asset group có checked “MAC-Ethenet” nếu không -> Hiển thị giá trị None
+Type > 150 -> không hiển thị ký tự sau 
+	Assignment 	Assignment 	Assignment 	Assignment 	Assignment 	Assignment 	Assignment 
+	Status	text	text	--	--	No	Status của quá trình assign
+= giá trị trường status của asset
+	Store 	text	text	--	--	No 	Tên store 
+= giá trị trường store gắn với Asset
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Company	text	text	--	--	No	Tên ngắn gọn company tương ứng 
+= giá trị trường Company gắn với asset
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+	Company name 	text	text	--	--	No	Tên riêng của company
+= giá trị trường Company name gắn với asset
+tối đa hiển thị trong khoảng cách 1  line-> các ký tự sau thay bằng “...”, hover hiển thị full text 
+	Owner 	text	text	--	--	No	Tên người sở hữu
+= giá trị trường Assign to
+
+	DU	text	text	--	--	No	Tên DU thuộc Owner 
+Lấy từ thông tin DU của owner 
+	From 	text	date	--	--	No	Ngày được assign tài sản (từ ngày..) 
+format: yyyy/mm/dd
+= giá trị trường “From Date” 
+	To	text	date	--	--	No	Ngày được assign tài sản (đến ngày..) 
+format: yyyy/mm/dd
+= giá trị trường “To Date” 
+	Asset Recipient	text	text	--	--	No	Loại đối tượng nhận tài sản
+= Giá trị trường Đối tượng nhận tài sản
+	Is the asset
+project-related?	text	giá trị yes/no 	--	--	No	Thường mang giá trị yes/no
+= Giá trị trường Tài sản có thuộc dự án không?
+Chỉ hiển thị nếu trường Đối tượng nhận tài sản = Giá trị “Phòng ban/Cá nhân” 
+	Issue link 	text field	link 	Yes	150	Yes	Link của issue
+= Giá trị trường Issue link
+Chỉ hiển thị nếu trường Tài sản thuộc dự án  = Giá trị “Yes” 
+type > 150 -> không lưu ký tự sau
+có dạng xxx.xxx
+	Project name	text	text	--	--	No	Tên project 
+= Giá trị trường Project name 
+Chỉ hiển thị nếu trường Tài sản thuộc dự án  = Giá trị “Yes” 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	MVV	text	number	--	--	No	Mã vụ việc tương ứng
+= Giá trị trường MVV
+Chỉ hiển thị nếu trường Tài sản thuộc dự án  = Giá trị “Yes” 
+	MVV switch button	icon button 	--	--	--	--	Hiển thị bên cạnh trường MVV
+Chỉ hiển thị khi trường MVV có thông tin 
+Dùng để đổi thông tin dự án, MVV
+Hiển thị popup cho thay đổi thông tin 
+
+	Tên PM	text	text	--	--	No	Tên PM 
+= Giá trị trường PM
+Chỉ hiển thị nếu trường Tài sản thuộc dự án  = Giá trị “Yes” 
+Nhiều PM -> cách nhau bởi dấu”;” 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Popup sau khi ấn MVV switch button	Popup sau khi ấn MVV switch button	Popup sau khi ấn MVV switch button	Popup sau khi ấn MVV switch button	Popup sau khi ấn MVV switch button	Popup sau khi ấn MVV switch button	Popup sau khi ấn MVV switch button
+	Project name	Dropdown+ search selection	--	Yes	--	yes	Danh sách projects 
+Lấy từ dashboard
+Format: Tên project + MVV(s) (nhiều mã vụ việc -> hiển thị hết cách nhau bởi dấu “/” )
+
+Partial text search (baseb on đk LIKE)
+Chỉ chọn một giá trị 
+Placeholder: Search and Select id
+	MVV	Dropdown+ search selection	--	Yes	--	Yes	MVV dự án tương ứng
+Default: Disable khi chưa chọn Project name
+Khi đã chọn Project name -> Hiển thị MVV tương ứng available, Nếu project có nhiều MVV-> hiển thị mã đầu tiên theo như data nhận về
+Lấy MVV còn hạn (ngày hiện tại <= end date MVV)
+Có thể chỉnh sửa được bằng cách ấn dropdown, chọn MVV ứng với dự án tương ứng (với dự án có nhiều MVV) 
+Chỉ chọn 1 giá trị 
+Placeholder: Search and Select id
+	Start Date (Form date)	Text	Date 	Yes	--	No	Thời gian được Assign (từ ngày)
+View only
+Default: Blank nếu chưa chọn MVV
+Tự động hiển thị theo MVV = Thời gian MVV tương ứng
+Format: yyyy/mm/dd 
+	End Date (To date)	Text	Date 	Yes	--	No	Thời gian được Assign (đến ngày)
+View only
+Default: Blank nếu chưa chọn MVV
+Tự động hiển thị theo MVV = Thời gian end date của MVV tương ứng
+Format: yyyy/mm/dd 
+	Issue link 	Text field 	Text	Yes	--	yes 	Điền link của issue
+Maxlenghth: 250 ký tự
+> 250 -> không lưu và hiển thị các ký tự sau
+Validate format dưới dạng link: xxxxx.xxxx
+Max hiển thị 1 line, > 1 line thay bằng “...”, hover hiển thị full text 
+Placeholder: Issue link
+	Cancel (Popup) 	button 	--	--	--	--	Đóng popup. Cancel action renew asset
+	Save (popup) 	button 	--	--	--	--	Save thông tin
+Ấn save thành công -> Đóng popup, cập nhật thông tin Project name, MVV, start/end date, issue link và tên PM tương ứng với các thông tin vừa điền ở popup 
+	Location 	Location 	Location 	Location 	Location 	Location 	Location 
+	Nation	text	text	--	--	- Yes: Asset ở status “Pending confirmation” và “In Use”
+No: Asset ở status còn lại	Tên Nation ứng với location
+= giá trị trường Nation 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text
+	Building	text	text	--	--	- Yes: Asset ở status “Pending confirmation” và “In Use”
+No: Asset ở status còn lại	Tên building ứng với nation
+= giá trị trường Building
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	City	text	text	--	--	- Yes: Asset ở status “Pending confirmation” và “In Use”
+No: Asset ở status còn lại	Tên City ứng với Building
+= giá trị trường City
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Floor	text	text	--	--	- Yes: Asset ở status “Pending confirmation” và “In Use”
+No: Asset ở status còn lại	Tên Floor ứng với City 
+= giá trị trường Floor 
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Purchasing	Purchasing	Purchasing	Purchasing	Purchasing	Purchasing	Purchasing
+	Manufacturer	text	text	--	--	No	Tên hãng sản xuất
+= giá trị trường Manufacturer
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Supplier	text	text	--	--	No	Tên nhà cung cứng 
+= giá trị trường Supplier
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+	Price ({Currency})	text	number	--	--	No	Giá thành sản phẩm 
+= giá trị trường Price
+{Currency} = giá trị trường Currency
+	VAT Rate(%)	text	number	--	--	No	% VAT Rate
+= giá trị trường VAT Rate(%) trong bảng dưới đây
+	Warranty (Months)	text	number	--	--	No	Khoảng thời gian bảo hàng
+= giá trị trường Warranty
+	Purchase Date	text	Date	--	--	No	Thời gian chi trả cho sp 
+= giá trị trường Purchase Date
+	Expiration Date	text	Date	--	--	No	Thời gian hết hạn sản phẩm 
+= giá trị trường Expiration Date 
+	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation	CIA Evaluation
+	C-Confidentiality	dropdown 	– 	--	--	yes	Đánh giá mức độ bảo mật thông tin
+Giá trị dropdown gồm có: 1, 2, 3
+	I-Integrity	dropdown 	– 	--	--	yes	Đánh giá mức độ đảm bảo tính toàn vẹn 
+Giá trị dropdown gồm có: 1, 2, 3
+	A-Availability	dropdown 	– 	--	--	yes	Đánh giá mức độ đảm bảo tính khả dụng
+Giá trị dropdown gồm có: 1, 2, 3
+	C + I + A	text	– 	--	--	No	Tổng 3 giá trị trên
+Auto tính 
+	Importance	text	text	--	--	No	Tính quan trọng 
+Tự động đánh giá dựa trên các giá trị C, I, A 
+o   C+I+A =8 hoặc 9: Special
+o   C+I+A =6 hoặc 7: High
+o   C+I+A =5: Medium
+C+I+A <=4: Low
+	Note	text field	text	No	500	Yes	Hiển thị note (nếu có)
+Hiển thị tối đa trong 1 line, > 1line -> thay các ký tự sau bằng “...” , hover xem full text 
+type > 500 -> không lưu các ký tự sau
+	Invoice	Invoice	Invoice	Invoice	Invoice	Invoice	Invoice
+	Form	text	text	--	--	No	Form của invoice 
+= giá trị trường Invoice Form 
+	No	text	number	--	--	No	No của invoice 
+= giá trị trường Invoice No
+	Currency	text	đơn vị	--	--	No	Đơn vị tiền tệ được tính
+= Giá trị trường Currency
+	Invoice Date	text	date	--	--	No	Date của invoice 
+= giá trị trường Invoice Date 
+	Serial	text	date	--	--	No 	Serial của invoice 
+= giá trị trường Invoice Serial
+	Cancel	Button	--	--	--	--	Cancel hành đông
+Refer to 6.5 Work Flow
+	Save	Button	--	--	--	--	Lưu thông tin thay đổi
+Refer to 6.5 Work Flow
+
+
+6.4 Business Rules
+Mọi thông tin không được chỉnh sửa đều có dạng View only 
+Không có giá trị -> hiển thị N/A
+Không cho phép chỉnh sửa các tài sản có trạng thái: Lost, Liquidated, Destroyed, checked out, Expired. 
+Quyền chỉnh sửa thông tin tài sản: theo File phân quyền Role & Permission
+
+6.5 Work Flow 
+
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	start action	User 	Từ màn view detail thông tin tài sản, user ấn button “Edit” 
+-> hệ thống mở các trường (có thể edit mô tả ở phần 6.3 ) thành dạng có thể chỉnh sửa được
+2	Chỉnh sửa thông tin asset 	User 	Người dùng tiến hành chỉnh sửa thông tin
+Sau khi user click vào btn Save, kiểm tra các trường C-I-A:
+-        Các trường C-I-A phải cùng để trống hoặc cùng được chọn một giá trị từ 1 đến 3
+Nếu không thỏa mãn điều kiện trên, hiển thị thông báo lỗi GAMS_Assetedit_01
+Đối với phần Associated Asset 
+ Chỉ cho phép edit trường Associated Asset khi tại Setting Module cho phép gắn tài sản thuộc group đang chọn với một tài sản khác (check box “Can be associated” = checked).
+ Thêm Associated Asset: Chỉ thêm khi trạng thái là New asset, Available, In Use
+o   User có thể tìm kiếm và lựa chọn từ danh sách mã tài sản. Danh sách này bao gồm asset code của các tài sản vật lý (Physical Asset) có trạng thái New asset, Available hoặc In Use và tại Setting Module không cho phép gắn tài sản thuộc group đang chọn với một tài sản khác (check box “Can be associated” = unchecked). 
+o	Trường hợp gắn tài sản đang edit vào một tài sản khác có trạng thái In Use, sau khi lưu thành công, cập nhật các thông tin sau và gửi email xác nhận cho owner của tài sản:
+Trạng thái của tài sản đang edit chuyển thành Pending confirmation
+ Cập nhật DB thông tin owner, thời gian mượn giống với tài sản được chọn.
+Ví dụ: Tại màn hình Detail của 2019-LK-001 (status = Available), thêm Associated Asset là 2019LAP-001 (status = In Use), khi lưu thành công, đổi trạng thái của 2019-LK-001 thành Pending confirmation, cập nhật thông tin owner, due date giống 2019LAP-001. Email yêu cần xác nhận được gửi đến email của owner
+Sau khi user thêm Associated Asset và lưu lại thành công, cập nhật tương ứng trường Associated Asset của tài sản được chọn. 
+Ví dụ: Tại màn hình Detail của 2019-LK-001, user chọn Associated Asset là 2019LAP-001, sau đó lưu thành công, thì đồng thời cập nhật thông tin trường Associated Asset của tài sản 2019LAP-001 là 2019-LK-001 tại màn hình Detail.
+Xóa Associated Asset:
+o   Nếu user xóa code tài sản khỏi trường Associated Asset, cập nhật tương ứng trường Associated Asset của tài sản có code vừa bị xóa. 
+Ví dụ: Tại màn hình Detail của 2019-LK-001, user xóa Associated Asset là 2019LAP-001, sau đó lưu thành công, thì đồng thời xóa mã 2019-LK-001 tại trường Associated Asset của tài sản 2019LAP-001.
+Khi xóa code tài sản tại Associated Asset, các thông tin khác của cả 2 tài sản không thay đổi. 
+3	Cancel action 	User 	Người dùng ấn Cancel button -> Nếu đang có thông tin mới vừa nhập -> Hệ thống sẽ hiển thị Message GAMS_Assetedit_04 
+4	Xác nhận lưu thông tin 	User	Người dùng ấn Save button -> Hiển thị message thông báo GAMS_Assetedit_05 
+
+6.6 Message List
+No	Context	Code	Type 	Content
+1	Các trường C-I-A không thỏa mãn điều kiện validate	GAMS_Assetedit_01	Popup	Please fill into all C-I-A fields or leave all C-I-A fields blank.
+2	Thiếu các trường thông tin required 	GAMS_Assetedit_02	Inline message, in red color	
+3	Link issue không hợp lệ	GAMS_Assetedit_03	inline message, in red color	Invalid URL
+4	Ấn cancel button khi đã nhập những thông tin mới 	GAMS_Assetedit_04	popup 	“Are you sure you want to cancel this action” 
++ yes/no button -> Ấn yes để đóng popup và quay về màn view detail, không lưu thông tin gì
+                 -> ấn no để đóng popup, mở màn edit trước đó với thông tin đang đc nhập 
+5	Ấn save button 	GAMS_Assetedit_05	toast message 	
+
+
+7. Xem danh sách Asset
+7.1 Tác nhân, điều kiện, kết quả mong muốn
+Xem danh sách asset
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, có Role tương ứng được truy cập vào màn view danh sách tài sản
+                                          Người dùng ấn chọn tab asset
+-	Kết quả mong muốn: Hệ thống hiển thị danh sách các asset với đầy đủ thông tin được mô tả chi tiết dưới đây
+7.2 UI Design
+
+7.3 User Interface Requirements
+No	Tên	Kiểu hiển thị 	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Header: Search+ filter (Mô tả thêm logic dưới phần 7.5 Work Flow )
+	Code	Search (text field)	text	No	250	Blank	Placeholder: Input code
+Type > 250 ký tự -> k lưu, k hiển thị thêm 
+	Name	Search (text field)	text	No	250	Blank	Placeholder: Input name
+Type > 250 ký tự -> k lưu, k hiển thị thêm 
+	Serial 	Search (text field)	text	No	250	Blank	Placeholder: Input serial
+Type > 250 ký tự -> k lưu, k hiển thị thêm 
+	Asset group	Dropdown_ search selection	  --	No	250	Blank	Placeholder: select Asset group
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần asset group trong bảng 
+Có dạng: 
+Trong đó người dùng có thể search trên thanh search bar để và chọn trong giá trị dropdown (hỗ trợ chọn 1, nhiều, tất cả), giá trị lần chọn đầu tiên sẽ hiển thị trên thanh search, các giá trị sau đó sẽ thể hiện dưới dạng +n…. (n tăng 1 đơn vị theo từng lần chọn) có dấu “x” để xoá từng giá trị 
+Type keyword, k khớp với giá trị nào trên dropdown -> hiển thị no data
+	Owner	Dropdown_ search selection	  --	No	  250	Blank	Placeholder: select Owner
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần owner trong bảng. Cho phép tìm kiếm cả những giá trị inactive
+Có dạng tương tự Asset group 
+	Project name 	Dropdown_ search selection	  --	No	  250	Blank	Placeholder: select project name
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần Project name trong bảng 
+Có dạng tương tự Asset group 
+	MVV	Dropdown_ search selection	  --	No	 250	Blank	Placeholder: select Mã vụ việc
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Lấy MVV còn hạn ngày hiện tại <= end date MVV
+Giá trị dropdown lấy từ data phần MVV trong bảng 
+Có dạng tương tự Asset group 
+	Search	Button 	  --	  --	  --	  --	Apply các filter và search trên phần search bar ( phần header) 
+
+	Add Asset	Button	  --	  --	  --	  --	Add thêm asset vào bảng 
+Refer to 1. Tạo mới Physical Asset
+
+	Action icon 	Icon button 	  --	  --	  --	  --	Bulk action
+Bao gồm các giá trị 
+Assign
+Return
+Site Transfer
+Liquidate
+QRcode print
+-> Chỉ quan tâm đến phần Assign và return 
+Assign: refer to 2. Assign asset
+Return: refer to 3. Return asset
+	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 7.5 Work Flow )
+	Asset type	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị asset type khác nhau trong bảng 
+có dạng 
+Cho phép chọn một, nhiều, tất cả giá trị
+Ấn ok để applied filter và reset để quay lại trạng thái mặc định ban đầu chưa chọn gì 
+	Status	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị status khác nhau trong bảng 
+Có dạng tương tự Asset type
+	DU	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị DU khác nhau trong bảng 
+Có dạng tương tự Asset type
+	Store	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị store khác nhau trong bảng 
+Có dạng tương tự Asset type
+	Overdue	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị yes/no
+Có dạng tương tự Asset type
+	Associated	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị yes/no
+Có dạng tương tự Asset type
+	Hired Asset	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị yes/no
+Có dạng tương tự Asset type
+	Guest Asset	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị yes/no
+Có dạng tương tự Asset type
+	C	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị N/A & 1, 2, 3
+Có dạng tương tự Asset type
+	I	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị N/A & 1, 2, 3
+Có dạng tương tự Asset type
+	A	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị N/A & 1, 2, 3
+Có dạng tương tự Asset type
+	SUM	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = các giá trị SUM khác nhau trong bảng
+Có dạng tương tự Asset type
+	Bảng giá trị Asset	Bảng giá trị Asset	Bảng giá trị Asset	Bảng giá trị Asset	Bảng giá trị Asset	Bảng giá trị Asset	Bảng giá trị Asset
+	Checkbox	Checkbox	  --	  --	  --	Unchecked 	Hiển thị đầu mỗi line
+Check box trên title = select/ unselet all
+	Code 	Text link	text link 	  --	  --	  --	  Hiển thị code tương ứng của asset (mã tài sản) 
+Click vào mã tài sản để đi đến trang Detail
+Mã code do hệ thống tự sinh theo nguyên tắc ở phần 1. Tạo mới Physical Asset
+	Chấm tròn thông báo	icon 	--	  --	  --	  --	Hiển thị tình trạng Sync SAP
+Màu xanh: Đã sang SAP 
+Màu vàng: Chưa sang SAP, khi hover sẽ hiển thị text có nội dung 
+	Serial	Text	Text	  --	  --	  --	= giá trị trường Invoice serial 
+Hiển thị serial của mỗi asset
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Name	Text	Text	  --	  --	  --	Tên tài sản
+= Giá trị trường Asset name 
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Asset type	Text	Text	  --	  --	  --	Loại tài sản 
+Hiển thị danh sách 4 loại tài sản:
+o   Physical Asset
+o   Information Asset
+o   Software Asset
+o   Service Asset
+
+	Asset group 	Text	Text				 Nhóm tài sản
+Đối với tài sản vật lý, nhóm tài sản được quy định tại Setting module
+Đối với 3 loại tài sản còn lại, mỗi loại chỉ có 1 nhóm và tên gọi trùng với tên gọi của loại tài sản. Cụ thể:
+o   Type = Information Asset, Group = Information Asset
+o   Type = Software Asset, Group = Software Asset
+o   Type = Service Asset, Group = Service Asset
+
+	Status	Text	Text	  --	  --	  --	Trạng thái của tài sản 
+Tài sản vật lý có các trạng thái sau: 
+o	Available
+o	In Use
+o	Pending Confirmation
+o	Malfunctioning
+o	Under Repair  
+o	Lost
+o	Liquidated
+o	Checked out
+Tài sản thông tin có các trạng thái:
+o	In Use
+o	Pending confirmation
+o	Lost
+o	Destroyed
+Tài sản phần mềm và tài sản dịch vụ có các trạng thái:
+o	In Use
+o	Pending confirmation
+o	Expired
+	Owner	Text	Text	  --	  --	  --	Chủ sở hữu tài sản
+Format: {tên đầy đủ} – CMC Global {Tên bộ phận}. Với dữ liệu inactive hiển thị theo Format: (inactive) {tên đầy đủ} – CMC Global {Tên bộ phận}
+= giá trị trường Owner
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”
+Kể cả hiển thị 1 line hay có ký tự “...” thay thế khi hover vào đều hiển thị full text dưới dạng email: 
+
+	DU	Text	Text	  --	  --	  --	Hiển thị tên DU ứng với Owner 
+= giá trị trường DU 
+	Store	Text	Text	  --	  --	  --	Store gắn với tài sản
+= giá trị trường store khi tạo tài sản
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Project name	Text	Text	  --	  --	  --	Trong trường hợp tài sản gắn với project
+Bằng giá trị trường Project name
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	MVV	Text	Number	  --	  --	  --	Trong trường hợp tài sản gắn với project
+Bằng giá trị trường MVV
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Overdue	Text	Yes/No	  --	  --	  --	Tình trạng quá hạn mượn tài sản
+Có 2 giá trị:
+Yes: tài sản đã quá hạn mượn
+No: tài sản chưa đến hạn trả hoặc không có hạn trả
+	Purchase date	Text	Text	  --	  --	  --	Ngày chi trả
+= Giá trị trường purchase date
+format: yyyy/mm/dd
+	Associated	Text	Yes/No	  --	  --	  --	Tình trạng tài sản đính kèm
+Có 2 giá trị:
+Yes: tài sản có tài sản đính kèm
+No: tài sản không tài sản đính kèm
+	Hired Asset	Text	Yes/No	  --	  --	  --	Tình trạng hired asset 
+Có 2 giá trị:
+Yes: tài sản được tích chọn là tài sản thuê
+No: tài sản không được tích chọn là tài sản thuê
+	Guest Asset	Text	Yes/No	  --	  --	  --	Tình trạng guest asset  
+Có 2 giá trị:
+Yes: tài sản được tích chọn là của guest 
+No: tài sản không được tích chọn là tài sản của guest
+	CIA Evaluation: hover vào hiển thị 	CIA Evaluation: hover vào hiển thị 	CIA Evaluation: hover vào hiển thị 	CIA Evaluation: hover vào hiển thị 	CIA Evaluation: hover vào hiển thị 	CIA Evaluation: hover vào hiển thị 	CIA Evaluation: hover vào hiển thị 
+	C	Text	Number	  --	  --	  --	Giá trị trường Confidentiality
+Mang các giá trị {N/A, 1, 2, 3}
+	I 	Text	Number	  --	  --	  --	Giá trị trường Integrity
+Mang các giá trị {N/A, 1, 2, 3}
+	A	Text	Number	  --	  --	  --	Giá trị trường Availability
+Mang các giá trị {N/A, 1, 2, 3}
+	Sum	Text	Number	  --	  --	  --	= tổng của 3 cột C+I+A
+ Hiện thị màu sắc cột Sum theo quy tắc: 
+Mức đặc biệt: Sum =8 hoặc 9, màu(đỏ)
+Mức cao: Sum=6 hoặc 7, màu(vàng)
+Mức trung bình: Sum = 5, màu (xanh lá)
+Mức thấp: Sum <= 4, màu (xám)
+	Action 	Icon button	  --	  --	  --	  --	Hover để hiện tooltip “More”
+Click vào icon để mở action list
+Với tài sản vật lý, action bao gồm:
+Assign
+Return
+Site transfer
+Malfunction report
+Repair
+Liquidate
+Check out
+Loss report
+Confirm
+QRCode print
+Với tài sản thông tin, action bao gồm: 
+Assign
+Destroy
+Loss report
+QRCode print
+Với tài sản phần mềm và tài sản dịch vụ, action bao gồm:
+Assign
+Expire
+QRCode print
+	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 
+	Số liệu phân trang  	text	number 	  --	  --	  --	Format: Số lượng phân trang trên tổng giá trị. Ví dụ
+
+Tức là màn hình đang được phân 100 dòng dữ liệu/ 1 creen của tổng số 11774 dòng dữ liệu 
+	Số trang hiện có	button	  --	  --	  --	  --	Số trang phụ thuộc vào số lượng data display trên 1 trang
+Format
+
+Hiển thị 5 trang đầu +... và số thứ tự của trang cuối cùng dưới dạng button
+Ấn vào trang tương ứng để xem dữ liệu của trang
+để xem trang trước đó (-1) của trang đang được hiển thị; Disable khi ở trang đầu
+để xem trang liền kề sau (+1) của trang đang được hiển thị; Disable khi ở trang cuối
+	Số lượng dòng hiển thị 1 trang 	dropdown list 	  --	  --	  --	  --	Dropdown có dạng và bao gồm các giá trị sau
+
+Chọn 20/page -> = Hiển thị 20 dòng dữ liệu/ 1 page
+
+7.4 Business Rules
+Data nào không có -> hiển thị N/A
+Action “Confirm” chỉ Enable với Owner của Asset ở Status “Pending Confirmation” và “Confirm overdue”
+7.5 Work Flow 
+
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action	User	Người dùng đăng nhập vào GAMS, chọn tab asset 
+2	Hiển thị thông tin 	Hệ thống	Hệ thống hiển thị thông tin danh sách asset 
+Sắp xếp theo thứ tự thời gian (mới nhất sẽ trên đầu danh sách) 
+3	Thực hiện các thao tác xem/ tìm kiếm thông tin 	User	Search+ filter
+Với các trường Code, Name, Serial người dùng nhập keyword, hệ thống sẽ applied dưới dạng partial search
+Với các trường Asset Group, Owner, Project name, MVV người dùng có thể nhập keyword để tìm các giá trị dropdown (có thể chọn 1, nhiều hoặc tất cả các giá trị)
+Mọi giá trị trên header chỉ được áp dụng sau khi người dùng ấn nút search, Ấn search sẽ kết hợp thông tin của tất cả các trường để hiển thị kết quả
+Nếu không có giá trị match -> hiển thị no data screen
+Nếu không hiển thị các giá trị theo kết quả( vẫn sắp xếp theo thứ tự thời gian) 
+Filter column dưới cột
+Với các filter ứng với từng cột, khi người dùng ấn chọn sẽ thực hiện filter các giá trị trong toàn bộ bảng (không phải chỉ những phần đang hiển thị trên giao diện) 
+Có thể kết hợp cùng đk Search, khi thực hiện filter các kết quả vừa áp dụng lệnh search. 
+4	Xác nhận tài sản	User	Người dùng ấn Confirm button -> Hiển thị message thông báo GAMS_ ListAsset _01 -> Chuyển trạng thái tài sản sang In Use
+
+7.6 Message List
+No	Context	Code	Type 	Content
+1	Ấn save "Confirm”	GAMS_ListAsset_01	toast message 	Confirm tài sản thành công
+
+
+Other changes
+1. Report/ Snapshot 
+1.1 Tác nhân, điều kiện, kết quả mong muốn
+Xem danh sách asset
+-	Tác nhân tham gia: Người dùng đăng nhập hệ thống lưu ý phân quyền (File Role & Permission Matrix) 
+-	Điều kiện trước: Người dùng đăng nhập hệ thống, có Role tương ứng được truy cập vào Module report
+                                          Tại tab report/ Hiển thị mặc định sub-tab là Snapshot
+-	Kết quả mong muốn: Hệ thống hiển thị danh sách thông tin như mô tả dưới đây, có hỗ trợ search sort filter 
+1.2 UI Design
+
+
+1.3 User Interface Requirements
+No	Tên	Kiểu hiển thị 	Kiểu dữ liệu	Required	Độ dài max	Mặc định	Description
+Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)	Header: Search+ filter (Mô tả thêm logic dưới phần 8.5 Work Flow)
+	Date 	Date picker 	Date	--	--	Ngày hiện tại 	Filter các asset tại ngày được chọn có thông tin như thế nào
+Mở calendar chỉ hiển thị những ngày từ ngày hiện tại trở về trước. 
+	Code	Search (text field)	text	No	250	Blank	Placeholder: Input code
+Type > 250 ký tự -> k lưu, k hiển thị thêm 
+	Name	Search (text field)	text	No	250	Blank	Placeholder: Input name
+Type > 250 ký tự -> k lưu, k hiển thị thêm 
+	Asset group	Dropdown_ search selection	  --	No	250	Blank	Placeholder: select Asset group
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần asset group trong bảng 
+Có dạng: 
+Trong đó người dùng có thể search trên thanh search bar để và chọn trong giá trị dropdown (hỗ trợ chọn 1, nhiều, tất cả), giá trị lần chọn đầu tiên sẽ hiển thị trên thanh search, các giá trị sau đó sẽ thể hiện dưới dạng +n…. (n tăng 1 đơn vị theo từng lần chọn) có dấu “x” để xoá từng giá trị 
+Type keyword, k khớp với giá trị nào trên dropdown -> hiển thị no data
+	Owner	Dropdown_ search selection	  --	No	  250	Blank	Placeholder: select Owner
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần owner trong bảng. Cho phép tìm kiếm cả những giá trị inactive 
+Có dạng tương tự Asset group 
+	Project name 	Dropdown_ search selection	  --	No	  250	Blank	Placeholder: select project name
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần Project name trong bảng 
+Có dạng tương tự Asset group 
+	MVV	Dropdown_ search selection	  --	No	 250	Blank	Placeholder: select Mã vụ việc
+Chặn k cho nhập quá 250 ký tự, k lưu các ký tự sau
+Giá trị dropdown lấy từ data phần MVV trong bảng 
+Có dạng tương tự Asset group 
+	Sync SAP	radio button	2 giá trị yes/no	--	--	no select 	Tình trạng sync SAP
+yes = có sync sang SAP, ngược lại = no 
+	Search	Button 	  --	  --	  --	  --	Apply các filter và search trên phần search bar ( phần header) 
+
+	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )	Column filter (Mô tả thêm logic dưới phần 8.5 Work Flow )
+	Asset type	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị asset type khác nhau trong bảng 
+có dạng 
+Cho phép chọn một, nhiều, tất cả giá trị
+Ấn ok để applied filter và reset để quay lại trạng thái mặc định ban đầu chưa chọn gì 
+	Status	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị status khác nhau trong bảng 
+Có dạng tương tự Asset type
+	DU	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị DU khác nhau trong bảng 
+Có dạng tương tự Asset type
+	Store	icon 	dropdown	  --	  --	  --	Dùng để filter các giá trị trong bảng
+Giá trị dropdown = giá trị store khác nhau trong bảng 
+Có dạng tương tự Asset type
+	Bảng thông tin 	Bảng thông tin 	Bảng thông tin 	Bảng thông tin 	Bảng thông tin 	Bảng thông tin 	Bảng thông tin 
+	Checkbox	Checkbox	  --	  --	  --	Unchecked 	Hiển thị đầu mỗi line
+Check box trên title = select/ unselet all
+	Code 	Text link	text link 	  --	  --	  --	  Hiển thị code tương ứng của asset (mã tài sản) 
+Click vào mã tài sản để đi đến trang Detail
+Mã code do hệ thống tự sinh theo nguyên tắc ở phần 1. Tạo mới Physical Asset
+	Chấm tròn thông báo	icon 	--	  --	  --	  --	Hiển thị tình trạng Sync SAP
+Chỉ hiển thị nút tròn Màu xanh nếu asset đó có tích sang SAP 
+	Serial	Text	Text	  --	  --	  --	= giá trị trường Invoice serial 
+Hiển thị serial của mỗi asset
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Name	Text	Text	  --	  --	  --	Tên tài sản
+= Giá trị trường Asset name 
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Asset type	Text	Text	  --	  --	  --	Loại tài sản 
+Hiển thị danh sách 4 loại tài sản:
+o   Physical Asset
+o   Information Asset
+o   Software Asset
+o   Service Asset
+
+	Asset group 	Text	Text				 Nhóm tài sản
+Đối với tài sản vật lý, nhóm tài sản được quy định tại Setting module
+Đối với 3 loại tài sản còn lại, mỗi loại chỉ có 1 nhóm và tên gọi trùng với tên gọi của loại tài sản. Cụ thể:
+o   Type = Information Asset, Group = Information Asset
+o   Type = Software Asset, Group = Software Asset
+Type = Service Asset, Group = Service Asset
+
+	Status	Text	Text	  --	  --	  --	Trạng thái của tài sản 
+Tài sản vật lý có các trạng thái sau: 
+o	Available
+o	In Use
+o	Pending Confirmation
+o	Malfunctioning
+o	Under Repair  
+o	Lost
+o	Liquidated
+o	Checked out
+Tài sản thông tin có các trạng thái:
+o	In Use
+o	Pending confirmation
+o	Lost
+o	Destroyed
+Tài sản phần mềm và tài sản dịch vụ có các trạng thái:
+o	In Use
+o	Pending confirmation
+o	Expired
+	Owner	Text	Text	  --	  --	  --	Chủ sở hữu tài sản
+Format: {tên đầy đủ} – CMC Global {Tên bộ phận}. Với dữ liệu inactive hiển thị theo Format: (inactive) {tên đầy đủ} – CMC Global {Tên bộ phận}
+= giá trị trường Owner
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”
+Kể cả hiển thị 1 line hay có ký tự “...” thay thế khi hover vào đều hiển thị full text dưới dạng email: 
+
+	DU	Text	Text	  --	  --	  --	Hiển thị tên DU ứng với Owner 
+= giá trị trường DU 
+	Store	Text	Text	  --	  --	  --	Store gắn với tài sản
+= giá trị trường store khi tạo tài sản
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Project name	Text	Text	  --	  --	  --	Trong trường hợp tài sản gắn với project
+Bằng giá trị trường Project name
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	MVV	Text	Number	  --	  --	  --	Trong trường hợp tài sản gắn với project
+Bằng giá trị trường MVV
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Purchase date	Text	Text	  --	  --	  --	Ngày chi trả
+= Giá trị trường purchase date
+format: yyyy/mm/dd
+	Vendor Price 	Text	Number 	  --	  --	  --	Giá tiền 
+= Giá thành của Asset (Price) 
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Add or Return date 	text	date 	  --	  --	  --	Ngày asset được add hay return 
+bắt đầu lưu tại mốc thời gian asset được add hoặc return để hiển thị 
+format: yyyy/mm/dd
+	Owner email 	text	email 	  --	  --	  --	Email của owner
+có dạng xxx@cmcglonal.vn
+Hiển thị tối đa trong khoảng cách 1 line trên cột > 1 line thay ký tự sau bằng “...”, hover hiển thị full text 
+	Export option 	Export option 	Export option 	Export option 	Export option 	Export option 	Export option 
+	Export 	Button dropdown 	  --	  --	  --	  --	Hiển thị dropdown chứa các option sau 
+trong đó
+ All detail fields= All trường thông tin của tài sản + All page
+Current fields = Các trường thông tin đang hiển thị trên màn hình + All page
+Template:
+All detail fields (cột “Company” sẽ dựa theo data cột “Tenant ID” trong DB: Null/1 = GLB, 2 = CJP)
+Current fields
+	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 	Pagination 
+	Số liệu phân trang  	text	number 	  --	  --	  --	Format: Số lượng phân trang trên tổng giá trị. Ví dụ
+
+Tức là màn hình đang được phân 100 dòng dữ liệu/ 1 creen của tổng số 11774 dòng dữ liệu 
+	Số trang hiện có	button	  --	  --	  --	  --	Số trang phụ thuộc vào số lượng data display trên 1 trang
+Format
+
+Hiển thị 5 trang đầu +... và số thứ tự của trang cuối cùng dưới dạng button
+Ấn vào trang tương ứng để xem dữ liệu của trang
+để xem trang trước đó (-1) của trang đang được hiển thị; Disable khi ở trang đầu
+để xem trang liền kề sau (+1) của trang đang được hiển thị; Disable khi ở trang cuối
+	Số lượng dòng hiển thị 1 trang 	dropdown list 	  --	  --	  --	  --	Dropdown có dạng và bao gồm các giá trị sau
+
+Chọn 20/page -> = Hiển thị 20 dòng dữ liệu/ 1 page
+
+1.4 Business Rules
+Data nào không có -> hiển thị N/A
+1.5 Work Flow 
+
+Bước	Thao tác	Actor thực hiện	Mô tả chi tiết 
+1	Start action	User	Người dùng đăng nhập vào GAMS, chọn tab report 
+2	Hiển thị thông tin 	Hệ thống	Hệ thống hiển thị thông tin subtab “Snapshot” đầu tiên với đầy đủ thông tin được mô tả bên trên  
+3	Thực hiện các thao tác xem/ tìm kiếm thông tin 	User	Search+ filter
+Với trường Date, giữ nguyên logic cũ, khi chọn sẽ hiển thị các asset trong history từ ngày quá khứ đến ngày được chọn  
+các trường Code, Name người dùng nhập keyword, hệ thống sẽ applied dưới dạng partial search
+Với các trường Asset Group, Owner, Project name, MVV người dùng có thể nhập keyword để tìm các giá trị dropdown (có thể chọn 1, nhiều hoặc tất cả các giá trị)
+Trường Sync SAP chọn một trong 2 giá trị Yes/No
+Mọi giá trị trên header chỉ được áp dụng sau khi người dùng ấn nút search, Ấn search sẽ kết hợp thông tin của tất cả các trường để hiển thị kết quả
+Nếu không có giá trị match -> hiển thị no data screen
+Nếu không -> hiển thị các giá trị theo kết quả( vẫn sắp xếp theo thứ tự thời gian) 
+Filter column dưới cột
+Với các filter ứng với từng cột, khi người dùng ấn chọn sẽ thực hiện filter các giá trị trong toàn bộ bảng (không phải chỉ những phần đang hiển thị trên giao diện) 
+Có thể kết hợp cùng đk Search, khi thực hiện filter các kết quả vừa áp dụng lệnh search. 
+4	Thực hiện export file 	User 	Người dùng có thể export file, lưu xuống device dưới dạng excel 
+Hiện filter các kết quả vừa áp dụng lệnh search. 
+ All detail fields= All trường thông tin của tài sản (kể cả những thông tin đang không được hiển thị trên màn hình) + All page
+Current fields = Các trường thông tin đang hiển thị trên màn hình + All page
+Khi người dùng start lệnh -> hệ thống tự động tải và lưu xuống device mẫu file tương ứng, tên và định dạng được quy định trong 2 files đính kèm
+File 1 File 2 (note: cột màu vàng là những cột thêm mới, khi export không cần có màu) 
+*Lưu ý: thông tin của các cột được lấy theo thông tin liên quan của Asset
+             Không có dữ liệu = N/A
+             Nếu trường đó không được hiển thị = None 
+VD: trường associated asset chỉ hiển thị khi asset đó thuộc group có associated asset -> nếu không thuộc group trên -> hiển thị none tại giá trị trường này trên cột
+
+1.6 Message List
+N/A
+
+2. Thay đổi trong phần Asset group 
+2.1 Thêm mới cột Mac- Ethenet
+- Khi Uncheck trường "Mac-Ethenet" sẽ check xem có tài sản nào của Asset Group đó đang có MAC ko?
+Có => Hiển thị popup thông báo lỗi "Mac-Ethenet Asset/There are assets in {Asset group} are mac-ethenet to other assets. Please remove these mac-ethenet before editting." + button "OK" (Click tắt popup)
+Không => Cho phép Uncheck trường "Mac-Ethenet" của Asset Group
+- Cột Mac- Ethenet sẽ được thêm mới như giao diện dưới đây với mặc định là unselect 
+
+- Đánh giá ảnh hưởng:
+Ảnh hưởng đến các tính năng trong phần asset group (thêm mới, chỉnh sửa, edit) -> thêm một trường thông tin
+Ảnh hưởng đến phần thêm và hiển thị thông tin Asset
+
+Phần hiển thị thông tin Asset, nếu Asset thuộc group không có tích chọn MAC -> hiển thị none. Trường hợp còn lại không có dữ liệu -> hiển thị N/A, có dữ liệu hiển thị đúng các thông tin đó. 
+
+2.2 Ẩn Asset Group “Khách hàng” và “Cá nhân”
+- Ẩn 2 asset group đang fix trong DB là “Khách hàng” và “Cá nhân”
+- Ảnh hưởng đến action "Check Out" với 2 loại tài sản này ở status "Available" và "In Use":
+Ẩn Asset Group "Khách hàng" để chuyển sang dùng tích chọn "GUEST" => Với các tài sản tích chọn "GUEST" ở status "Available" và "In Use" sẽ có action "Check Out"
+Ẩn Asset Group "Cá nhân" do ko dùng nữa nên ko cần chỉnh sửa gì ở logic mới
+- Lưu ý: Chỉ ẩn và giữ nguyên logic cũ với các tài sản cũ đã tạo để không bị lỗi khi action với các tài sản cũ
+
+3. Thay đổi cấu trúc Code Asset
+STT	Case	Action	VD Code
+1	Global mua về tự dùng	Không tích gì	GLB2024-Lap001
+2	Global mua hộ KH	Không tích gì	GLB2024-Lap001
+3	Global thuê về tự dùng	Tích Hired Asset	GLB2024Hired-Lap001
+4	Global thuê về cho KH dùng	Tích Hired Asset	GLB2024Hired-Lap001
+5	Global cầm của KH để tự dùng	Tích Guest Asset	GLB2024Guest-Lap001
+
+
+Cấu trúc Code Asset: Company + Năm + Type + (-) + Abbreviation Asset Group + STT
+Trong đó:
+Company:
+= GLB (khi Tenant = Null/1)
+= CJP (khi Tenant = 2)
+Type:
+= Null (case 1, 2)
+= Hired (case 3, 4)
+= Guest (case 5)
+STT tăng dần từ “001”
+Lưu ý:
+Ẩn các Asset Group: Khách hàng, Thuê, Cá nhân
+Không được tích đồng thời cả Hired Asset và Guest
+Check lại vụ syn sap khi cập nhật cấu trúc Code Asset
+
+
+4. Mail thông báo trả tài sản
+4.1 Tác nhân, điều kiện, kết quả mong muốn
+Các bên liên quan với tài sản (User, PM, QLTS) sẽ nhận được mail thông báo trả/thu hồi tài sản khi sắp đến hạn/đã đến hạn/quá hạn sử dụng tài sản
+Tác nhân tham gia: User, PM, QLTS
+Điều kiện trước: Tài sản đang ở trạng thái In Use
+Kết quả mong muốn: Hệ thống gửi thông báo qua mail đến các bên liên quan để thực hiện trả/thu hồi tài sản
+4.2 UI Design
+Trước hạn trả 7 ngày
+Đến hạn trả
+Quá hạn trả từ 7/14/21/28 ngày
+4.3 Business Rules
+Với dự án có nhiều PM hoặc có nhiều Admin thì sẽ gửi mail đến tất cả với cùng nội dung (khác tên người nhận - Dear {PM}/{Admin})
+Quá hạn trả 30 ngày
+
+
+
+
+5. Store transfer
+Chỉnh sửa chức năng “Site transfer” sang “Store transfer”
+Hiển thị thêm thông tin phần Location khi “Store transfer” => Thông tin “Location” sẽ được hiển thị theo Store đang chọn ở trường “Transfer to Store”
+

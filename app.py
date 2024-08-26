@@ -15,7 +15,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 logger.addHandler(AzureLogHandler(
-    connection_string=os.getenv('APPLICATIONINSIGHTS_CONNECTION_STRING'))
+    connection_string='InstrumentationKey=ca2ec131-0b6d-43ae-8baf-79e8381207e8;IngestionEndpoint=https://southeastasia-1.in.applicationinsights.azure.com/;LiveEndpoint=https://southeastasia.livediagnostics.monitor.azure.com/;ApplicationId=4a076b5d-2d70-48dd-8ee1-3e1bae53c6fc')
 )
 
 
@@ -25,10 +25,7 @@ app = Flask(__name__)
 # Obtain time from public api
 def query_time():
     try:
-        response = requests.get(
-            url="http://worldtimeapi.org/api/timezone/america/new_york",
-            timeout=5
-        )
+        response = requests.get(url="http://worldtimeapi.org/api/timezone/america/new_york",timeout=5)
 
         if response.status_code == 200:
             time = (json.loads(response.text))['datetime']
@@ -46,13 +43,11 @@ def query_time():
 # Get Key Vault secret
 def get_secret():
 
-    VAULT_NAME = os.getenv('KEY_VAULT_NAME')
-    KEY_VAULT_SECRET_NAME = os.getenv('KEY_VAULT_SECRET_NAME')
+    VAULT_NAME = 'hvlinhkey'
+    KEY_VAULT_SECRET_NAME = 'secrett'
     try:
         if 'MSI_CLIENT_ID':
-            credential = DefaultAzureCredential(
-                managed_identity_client_id=os.getenv('MSI_CLIENT_ID')
-            )
+            credential = DefaultAzureCredential(managed_identity_client_id='af71cbe5-43e0-46d1-af94-2eaae7e7348d')
         else:
             raise Exception
     except Exception:
@@ -62,8 +57,7 @@ def get_secret():
         )
 
     try:
-        secret_client = SecretClient(
-            vault_url=f"https://{VAULT_NAME}.vault.azure.net/", credential=credential)
+        secret_client = SecretClient(vault_url=f"https://{VAULT_NAME}.vault.azure.net/", credential=credential)
         secret = secret_client.get_secret(f"{KEY_VAULT_SECRET_NAME}")
         return secret.value
     except Exception:
